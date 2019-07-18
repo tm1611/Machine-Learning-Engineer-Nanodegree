@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Character-Level LSTM in PyTorch</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Introdution to Deployment</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,240 +11775,204 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Character-Level-RNN">Character-Level RNN<a class="anchor-link" href="#Character-Level-RNN">&#182;</a></h1><p>In character-wise RNN problems the goal is to input characters and output characters which are most likely how the text proceeds. Individual characters are passed in to the level using one-hot-encoding.</p>
-<blockquote><p>One-hot-encoded characters: Every character is a binary feature 0/1, i.e. character is there vw. character not there.</p>
-</blockquote>
-<p>These one-hot-encoded features constitute the input layer.</p>
-<p>The input layer is passed to one (or more) hidden layers. The hidden layer(s) use LSTM cells.</p>
-<blockquote><p>An LSTM cell takes in the input as well as a hidden state. The hidden state is passed to the next cell. Simultaneously the cell produces an output.</p>
-</blockquote>
-<p>The last layer is the output layer. The activation function is a softmax as we'd like to get a probability distribution for the next character. This answers the question: Which character is most likely the next one in the sequence?</p>
-<h4 id="How-to-get-the-batches-right?">How to get the batches right?<a class="anchor-link" href="#How-to-get-the-batches-right?">&#182;</a></h4><p>How does batching works for RNN?</p>
-<p>Using RNNs, we're ttraining on sequences of data. Splitting these sequences into multiple shorter ones  enables us to take advantage of <strong>matrix operations to make training more efficient.</strong></p>
-<p>RNNs are usually trained on multiple sequences in parallel.</p>
-<p>Example sequence:</p>
-
-<pre><code># starting sequence
-[ 1 2 3 4 5 6 7 8 9 10 11 12 ]
-
-# split in two sequences, i.e. batch_size=2
-[ 1 2 3 4 5 6 ]
-[ 7 8 9 10 11 12 ]
-
-# Along batch size, we also choose seq_length
-# seq_length = 3, batch_size = 2
-
-Batch 1: [1 2 3 ] ---&gt; Batch 2: [4 5 6 ]
-         [7 8 9 ]               [10 11 12 ]</code></pre>
-<p>The hidden state from batch 1 is transferred to batch 2. In this way, the sequence information is transferred across batches for each mini sequence.</p>
-<hr>
-<h1 id="Character-Level-LSTM-in-PyTorch">Character-Level LSTM in PyTorch<a class="anchor-link" href="#Character-Level-LSTM-in-PyTorch">&#182;</a></h1><ul>
-<li>Construct a character-level LSTM in PyTorch</li>
-<li>Network will train character by character on some text, then generate new text character by character. </li>
-<li>Here, trained on the beginning of the book <em>Anna Karenina</em></li>
-<li>This model will be able to generate new text based on the text from the book</li>
-</ul>
-<p>This network is based on:</p>
+<h1 id="Introduction-to-Deployment">Introduction to Deployment<a class="anchor-link" href="#Introduction-to-Deployment">&#182;</a></h1><p>This section is as platform-agnostic as possible but application part focuses on Amazon Web Services (AWS).</p>
+<p>Contents</p>
 <ul>
-<li>Andrej Karpathy's blog post: <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">The unreasonable Effectiveness of Recurrent Neural Networks</a></li>
-<li>Implementation in Torch: <a href="https://github.com/karpathy/char-rnn">Github link</a></li>
+<li>Cloud Computing</li>
+<li>Machine Learning in the Workplace</li>
+<li>Deployment </li>
 </ul>
-<p>The general architecture of character-wise RNN:</p>
-<p><img src="../images/charseq.jpeg"></p>
-<h4 id="Load-required-resources">Load required resources<a class="anchor-link" href="#Load-required-resources">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># standard libraries</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># time</span>
-<span class="kn">import</span> <span class="nn">time</span>
-
-<span class="c1"># torch</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Load-in-Data">Load in Data<a class="anchor-link" href="#Load-in-Data">&#182;</a></h2><ul>
-<li>Load Anna Karenina text file</li>
-<li>Convert it into integers for our network to use</li>
+<p>After getting familiar with machine learning deployment we'll put these ideas to practice using <a href="https://aws.amazon.com/sagemaker/">Amazon SageMaker</a> as one way to deploy machine learning models.</p>
+<p>Questions to answer:</p>
+<ul>
+<li>What is the machine learning workflow?</li>
+<li>How does <strong>deployment</strong> fit into the machine learning workflow?</li>
+<li>What is cloud computing?</li>
+<li>Why are we using cloud computing for deploying machine learning models?</li>
+<li>Why isn't deployment a part of many machine learning curriculums?</li>
+<li>What does it mean for a model to be deployed?</li>
+<li>What are the essentail characteristics associated with the code of deployed models?</li>
+<li>What are different cloud computing platform we might use to deploy our machine learning models?</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../data/anna.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Text length (characters):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 100 characters:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Text length (characters): 1985223
-First 100 characters:
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[2]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;Chapter 1\n\n\nHappy families are all alike; every unhappy family is unhappy in its own\nway.\n\nEverythin&#39;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Tokenization">Tokenization<a class="anchor-link" href="#Tokenization">&#182;</a></h4><ul>
-<li>Creating a couple of dictionaries<ul>
-<li>These dictionaries are used to conver the characters to and from integers</li>
-</ul>
-</li>
-<li>Encoding the characters as integers makes it easier to use as input in the network.</li>
-</ul>
-<p>We create two dictionaries:</p>
+<h2 id="Machine-Learning-Workflow">Machine Learning Workflow<a class="anchor-link" href="#Machine-Learning-Workflow">&#182;</a></h2><p>Consists of three components:</p>
 <ol>
-<li><code>int2char</code>: maps integers to characters</li>
-<li><code>char2int</code>: maps characters to integers</li>
+<li>Explore &amp; Process Data<ul>
+<li>Retrieve data</li>
+<li>Clean &amp; Explore: Explore patterns, remove any outliers</li>
+<li>Transform and prepare: Data Normalization, train-validation-test split</li>
+</ul>
+</li>
+<li>Modeling<ul>
+<li>Develop &amp; Train Model</li>
+<li>Validate / Evaluate Model</li>
+</ul>
+</li>
+<li>Deployment <ul>
+<li>Deploy to Production</li>
+<li>Monitor and Update Model &amp; Data </li>
+</ul>
+</li>
 </ol>
+<p>References:</p>
+<ul>
+<li>AWS discusses their definition of the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works-mlconcepts.html">ML Workflow</a></li>
+<li>Google Cloud Platform (GCP) and their definition of the <a href="https://cloud.google.com/ml-engine/docs/tensorflow/ml-solutions-overview">ML Worklflow</a></li>
+<li>Microsoft Azure on their definition of the <a href="https://docs.microsoft.com/en-us/azure/machine-learning/service/overview-what-is-azure-ml">ML Workflow</a></li>
+</ul>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># map each character to an integer</span>
-<span class="n">chars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-
-<span class="n">int2char</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">chars</span><span class="p">))</span>
-<span class="n">char2int</span> <span class="o">=</span> <span class="p">{</span><span class="n">ch</span><span class="p">:</span> <span class="n">ii</span> <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">int2char</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-
-<span class="c1">### map text characters to int</span>
-
-<span class="c1"># example of how this mapping works</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Character &#39;i&#39; is mapped to:&quot;</span><span class="p">,</span> <span class="n">char2int</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">])</span>
-
-<span class="c1"># use for loop</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-<span class="n">encoded</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
-    <span class="n">encoded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char2int</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
-
-<span class="n">encoded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time for-loop:&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
-
-<span class="c1"># use list comprehension</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">encoded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">char2int</span><span class="p">[</span><span class="n">char</span><span class="p">]</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">])</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time list comprehension:&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length of encoded:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">encoded</span><span class="p">))</span>
-<span class="n">encoded</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Character &#39;i&#39; is mapped to: 42
-Time for-loop: 0.8123791217803955
-Time list comprehension: 0.40152788162231445
-Length of encoded: 1985223
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[3]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([46, 17, 39, 56, 38, 25, 50, 60, 48, 61])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Pre-processing-the-data">Pre-processing the data<a class="anchor-link" href="#Pre-processing-the-data">&#182;</a></h4><ul>
-<li>LSTM expects input that is one-hot encoded<ul>
-<li>Each character is converted into an integer (using the dictionary),</li>
-<li>then converted into a column vector. </li>
-<li>This column vector will have the value of 1 and the rest will be filled with 0s </li>
+<h2 id="Cloud-Computing">Cloud Computing<a class="anchor-link" href="#Cloud-Computing">&#182;</a></h2><p>Can be thought of as transforming an IT product into a service.</p>
+<blockquote><p>Using an internet connected device to log into a cloud computing service to access an IT resource. These IT resources are stored in the clud provider's data center.</p>
+</blockquote>
+<p>Other cloud services than cloud storage:</p>
+<ul>
+<li>Cloud applications, databases, virtual machines, SageMaker, etc. </li>
+</ul>
+<h4 id="Why-use-cloud-computing?">Why use cloud computing?<a class="anchor-link" href="#Why-use-cloud-computing?">&#182;</a></h4><p>Opt to use cloud computing services due time and cost constraints of building own capacities (see capacity utilization graph below). The graph shows schematically how cloud computing compares to traditinoal infrastructure related to customer demand.</p>
+<p><img src="../images/curve3.png"></p>
+<p>Building up or laying off infrastructure takes time and money, whereas cloud computing is easily scalable to the current demand. As it is assumed to very costly to have excess demand as well as it is costly to be capacity restricted it is economically reasonable to rely on cloud computing services.</p>
+<ul>
+<li>AWS: <a href="https://aws.amazon.com/de/what-is-cloud-computing/">What is Cloud Computing?</a></li>
+</ul>
+<p>Benefits:</p>
+<ol>
+<li>Reduced investments and proportional costs (cost reduction)</li>
+<li>Increased scalability (providing simplified capacity planning)</li>
+<li>Increased availability and reliability (providing organizatinal agility)</li>
+</ol>
+<p>Risks:</p>
+<ol>
+<li>(Potential) Increase in Security Vulnerabilities</li>
+<li>Reduced Operational Governance Control (over cloud resources)</li>
+<li>Limited Portability Between Cloud Providers</li>
+<li>Multi-regional Compliance and Legal Issues</li>
+</ol>
+<h3 id="Deployment-to-Production">Deployment to Production<a class="anchor-link" href="#Deployment-to-Production">&#182;</a></h3><ul>
+<li>Integrate machine learning model into an existing production environment </li>
+<li>Model needs to be provided to those responsible for deployment. </li>
+</ul>
+<p>In the following we will assume taht the machine learning model was developed in Python.</p>
+<p>Three primary methods used to transfer a model from the modeling component to the deployment component (least to most commonly used):</p>
+<ul>
+<li>Python model is recorded into the programming langauge of the production environment</li>
+<li>Model is coded in Predictive Model Markpu Language (PMML) or Portable Format Analytics (PFA)</li>
+<li>Python model is converted into a format that can be used in the production environment (i.e. SageMaker).<ul>
+<li>Use libraries and methods that convert the model into code that can be used in the production environment like PyTorch, TensorFlow, Scikit-Learn, etc. that convert Python models intot he intermediate standard format, such as <a href="https://onnx.ai/">Open Neural Network Exchange</a> format.</li>
+<li>This standard format can be converted into the software native of the production environment. </li>
+</ul>
+</li>
+</ul>
+<p>The last one is the easierst and fastesst way to move a Python Model from modeling directly to deployment:</p>
+<ul>
+<li>Typical way to move models into the production environoment</li>
+<li>Technologies like <em>containers</em>, <em>endpoints</em> and <em>APIs</em> (Application Programming Interfaces) also help ease the work required for deploying a model into production environment. </li>
+</ul>
+<p>In earlier stages development was typically handled by analysts, whereas operations (deployment) was handled by software developers responsible for the production environment.</p>
+<p>Recently, this division between development and operations softens enabling analysts to handle certain aspects of deployment and enables faster updates to faltering models.</p>
+<p>Advances in cloud services, like <a href="https://aws.amazon.com/sagemaker/">SageMaker</a> and <a href="https://cloud.google.com/ml-engine/">ML Engine</a>, and deployment technologies, like Containers and REST APIs, allow for analysts to easily take on the responsibilities of deployment.</p>
+<h3 id="Production-Environments">Production Environments<a class="anchor-link" href="#Production-Environments">&#182;</a></h3><ul>
+<li>Endpoint: Interface to the model</li>
+<li>The interface (enpoint) facilitates an ease of communication between the modle and the application.</li>
+</ul>
+<p><img src="../images/endpoint2.png"></p>
+<p>One way to think of the <strong>endpoint</strong> that acts as this interface:</p>
+<ul>
+<li><strong>endpoint</strong> itself if like a function call</li>
+<li>the <strong>function</strong> itself would be the model and</li>
+<li>the <strong>Python program</strong> is the application</li>
+</ul>
+<p>Similar to the example above:</p>
+<ul>
+<li><strong>Endpoint</strong> accepts user data as the <strong>input</strong> and <strong>returns</strong> the model's prediction based upon this input through the endpoint (similar to a function call)</li>
+<li>In the example, the user data is the input argument and the prediction is the returned value from the function call. </li>
+<li>The <strong>application</strong>, here is the <strong>python program</strong>, displays the model's prediction to the application user. </li>
+</ul>
+<p>The endpoint itself is just the interface between the model and the application.</p>
+<ul>
+<li>interface enables users to get predictions from the deployed model based on their user data. </li>
+</ul>
+<h4 id="How-does-the-endpoint-(interface)-facilitates-communication-between-application-and-model?">How does the endpoint (interface) facilitates communication between application and model?<a class="anchor-link" href="#How-does-the-endpoint-(interface)-facilitates-communication-between-application-and-model?">&#182;</a></h4><p>Application and model communicate throught he endpoint (interface). The enpoint is an Application Programming Interface (API).</p>
+<ul>
+<li>API: set of rules that enable programs (here the application and the model) to communicate with each other</li>
+</ul>
+<p>Here, the <em>API</em> uses a <strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer, <strong>REST</strong> architecture that provides a framework for the set of rules and constraints that mus be adhered to for communication betweeen programs.</p>
+<ul>
+<li>Hypertext Transfer Protocol (HTTP): application protocol for distributed, collaborative, hypermedia information systems. Foundation of data communication for WWW. </li>
+<li><strong>REST API</strong> is one that uses HTTP requests and responses to enable communication between the application and the model through the endpoint (interface). </li>
+<li><strong>HTTP request</strong> and <strong>HTTP response</strong> are communications sent between the application and model. </li>
+</ul>
+<h4 id="HTTP-request">HTTP request<a class="anchor-link" href="#HTTP-request">&#182;</a></h4><p>HTTP request sent from applicaion to model consists of four parts:</p>
+<ul>
+<li>Enpoint: Endpoint in the form of a Uniform Resource Locator (URL), aka web address</li>
+<li>HTTP method: Four <strong>HTTP methods</strong>. For deployment of our application we'll use the <strong>POST method</strong>.</li>
+<li>HTTP Headers: The <strong>headers</strong> will contain additional information (like data format within the message) that's passed to the receiving program. </li>
+<li>Message (Data or Body): The final part is the <strong>message</strong> (data or body); for deployment this will contain the user's data which is input into the model. </li>
+</ul>
+<p><img src="../images/httpmethods.png"></p>
+<h4 id="HTTP-response">HTTP response<a class="anchor-link" href="#HTTP-response">&#182;</a></h4><p>Sent from model to your application and is composed of three parts:</p>
+<ul>
+<li>HTTP Status Code: If successfully received and processed the user's data that was sent in the <strong>message</strong> status code should start with a 2 (i.e. 200)</li>
+<li>HTTP Headers: The headers will contain additional information, like format of the data within the message, thats passed to the receiving program. </li>
+<li>Message (Data or Body): What's returnes as the data within the message is the prediction that's provided by the model. </li>
+</ul>
+<p>The prediction is then presented to the application user through the application. The enpoint is the interface that enables communication between the application and the model using a <strong>REST API</strong>.</p>
+<h4 id="Whats's-application's-reponsibility?">Whats's application's reponsibility?<a class="anchor-link" href="#Whats's-application's-reponsibility?">&#182;</a></h4><ul>
+<li>Format the user's data to put into the HTTP request message and be used by the model</li>
+<li>Translate predictions from the HTTP response message in a way that's easy for the application user's to understand. </li>
+</ul>
+<p>Information included in the HTTP messages sent between <strong>application</strong> and <strong>model</strong>:</p>
+<ul>
+<li>User's data will need to be in a CSV or JSON format with a specific ordering of the data. Ordering depends on the used model. </li>
+<li>Often predictions will be returned in CSV or JSON format with a specific ordering of the returned predictions. Ordering depends on the used model. </li>
+</ul>
+<h2 id="Containers">Containers<a class="anchor-link" href="#Containers">&#182;</a></h2><p>So far, two primary programs, the <strong>model</strong> and the <strong>application</strong>, that communicate with each other through the <strong>endpoint (interface)</strong></p>
+<p><img src="../images/endpoint3.png"></p>
+<ul>
+<li>What is the <strong>model</strong>? The model is the Python model that's created, trained, and evaluated in the modeling component of the machine learning workflow.</li>
+<li>What is the <strong>application</strong>? The application is a web or software that enables the users to use the model to retrieve predictions.</li>
+</ul>
+<p>Both, model and application, require a computing environment. One way to create this environment is to use <strong>containers</strong>. Containers are created using a script that contains instructions on which software packages, libraries, and other computing attributes are needed in order to run a software application, in our case either the model or application.</p>
+<h4 id="But-what-is-a-container?">But what is a container?<a class="anchor-link" href="#But-what-is-a-container?">&#182;</a></h4><blockquote><p>A container can be thought of as a standardized collection/bundle of software that is to be used for the specific purpose of running an application.</p>
+</blockquote>
+<p>A common container software is <a href="www.docker.com">Docker</a>.</p>
+<h3 id="Containers,-explained">Containers, explained<a class="anchor-link" href="#Containers,-explained">&#182;</a></h3><p>Shipping container analogy:</p>
+<ul>
+<li>Shipping container can contain a wide variety of products</li>
+<li>Structure of a shipping container provides the ability to hold different types of products</li>
+</ul>
+<p>Docker containers:</p>
+<ul>
+<li>Can contain all types of different software. </li>
+<li>Structure of a Docker <strong>container</strong> enables the <strong>container</strong> to be created, saved, used, and deleted through a set of common tools. </li>
+<li>The common tool set works with <strong>any container</strong> regardless of the software the <strong>container</strong> contains. </li>
+</ul>
+<p>The image below shows three containers running three different applications</p>
+<p><img src="../images/container.png"></p>
+<p>This architecture provides the following advantages:</p>
+<ul>
+<li>Isolates the application, which increases security</li>
+<li>Requires only software neede to run the application, which uses computational resources more efficiently and allows for faster application deployment. </li>
+<li>Makes application creation, replication, delection, and maintenance easier and the same across all applicatinos that are deployed using containers. </li>
+<li>Provides a more simple and secure way to replicate, save, and share containers. </li>
+</ul>
+<p>A container script file is used to create a container.</p>
+<ul>
+<li>Can easily be shared with others, provides a simple method to replicate a particular container. </li>
+<li>The container script is simply the instructiuons (algorithm) that is used to create a container. For <em>Docker</em>, these files are called <em>dockerfiles</em>. </li>
+</ul>
+<p><img src="../images/container2.png"></p>
+<ul>
+<li>Container engine uses a container script to create a container for an application to run within.</li>
+<li>These container script files can be stored in repositories, which provide a simple means to share and replicate containers. </li>
+<li>Docker: <a href="https://hub.docker.com/explore/">Docker Hub</a> is the official repository for storing and sharing dockerfiles. </li>
+<li>Example of a dockerfile: <a href="https://github.com/pytorch/pytorch/blob/master/docker/pytorch/Dockerfile">Link</a><ul>
+<li>The dockerfile creates a docker container with Python 3.6 and PyTorch installed.</li>
 </ul>
 </li>
 </ul>
@@ -12016,39 +11980,181 @@ Length of encoded: 1985223
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">one_hot_encode</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">):</span>
-    
-    <span class="c1"># Initialize arrays with zeros</span>
-    <span class="n">one_hot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    
-    <span class="c1"># Fill the appropriate elements with ones</span>
-    <span class="n">one_hot</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">one_hot</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="mf">1.</span>
-    
-    <span class="c1"># Finally reshape it to get back to the original array</span>
-    <span class="n">one_hot</span> <span class="o">=</span> <span class="n">one_hot</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">*</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">))</span>
-    
-    <span class="k">return</span> <span class="n">one_hot</span>
-</pre></div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Characteristics-of-Deployment-and-Modeling">Characteristics of Deployment and Modeling<a class="anchor-link" href="#Characteristics-of-Deployment-and-Modeling">&#182;</a></h2><h4 id="What-is-Deployment?">What is Deployment?<a class="anchor-link" href="#What-is-Deployment?">&#182;</a></h4><p>Method that integrates a machine learnin model into an existing production environment so that the model can be used to make decisions or predictions based upon data input into this model.</p>
+<h4 id="Whas-is-a-production-environment?">Whas is a production environment?<a class="anchor-link" href="#Whas-is-a-production-environment?">&#182;</a></h4><p>A production environment can be thought of as a web, mobile, or other software application that is currently being used by many people and must respond quickly to those users' requests.</p>
+<h3 id="Characteristics-of-modeling">Characteristics of modeling<a class="anchor-link" href="#Characteristics-of-modeling">&#182;</a></h3><h4 id="Hyperparameters">Hyperparameters<a class="anchor-link" href="#Hyperparameters">&#182;</a></h4><p>In ML, a hyperparameters is a parameter whose value cannot be estimated from the data:</p>
+<ul>
+<li>Not learned through the estimators. </li>
+<li>Must be set by the developer</li>
+<li>Hyperparameter tuning is an important part of model training. </li>
+<li>Cloud platform machine learning services often provide methods that allow for automatic hyperparameter tuning for use with model training</li>
+<li>Without automatic hyperparameter option, one option is to use methods from scikit-learn Python library for hyperparameters tuning (<a href="https://scikit-learn.org/stable/modules/grid_search.html#">link</a>.</li>
+</ul>
+<h3 id="Characteristics-of-Deployment">Characteristics of Deployment<a class="anchor-link" href="#Characteristics-of-Deployment">&#182;</a></h3><h4 id="Model-Versioning">Model Versioning<a class="anchor-link" href="#Model-Versioning">&#182;</a></h4><ul>
+<li>Saving model version as model's metadata in database</li>
+<li>deployment platform should indicate a deployed model's version. </li>
+</ul>
+<h4 id="Model-Monitoring">Model Monitoring<a class="anchor-link" href="#Model-Monitoring">&#182;</a></h4><ul>
+<li>Monitor the performance of the model</li>
+<li>Application may need to be updated</li>
+</ul>
+<h4 id="Model-Updating-and-Routing">Model Updating and Routing<a class="anchor-link" href="#Model-Updating-and-Routing">&#182;</a></h4><p>Another characteristic:</p>
+<ul>
+<li>Ability to update deployed model</li>
+<li>If the monitoring process shows that performance metrics are not met the model requires updating. </li>
+<li>Change in the data generating process: Collect these data to update the model</li>
+<li>Routing: To allow comparison of performance between the deployed model variants, routing should be supported.</li>
+</ul>
+<h4 id="Model-Predictions">Model Predictions<a class="anchor-link" href="#Model-Predictions">&#182;</a></h4><p>Two common type of predictions provided by the deployed model.</p>
+<ul>
+<li>On-demand predictions (online, real-time, synchronous predictions) <ul>
+<li>Predictions are returned in the response from the request. Often, these requests and responses are done through an API using JSON or XML formatted strings.</li>
+<li>Commonly used to provide real-time, online responsen based upon a deployed model. </li>
+</ul>
+</li>
+<li>Batch predictions (asynchronous, batch-based predictions)<ul>
+<li>One expects high volume of requests with more periodic submissions, latency won't be an issue. </li>
+<li>Batch request points to specifically formatted data file or request and will return the predictions to a file. Cloud services require these files will be stored in the cloud provider's cloud. </li>
+<li>Batch predictions are commonly used to help make business decisions (i.e. for weekly reports). </li>
+</ul>
+</li>
+</ul>
+<p><img src="../images/mlworkflow.png"></p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Comparing-Cloud-Providers">Comparing Cloud Providers<a class="anchor-link" href="#Comparing-Cloud-Providers">&#182;</a></h2><p>Focus on <a href="https://aws.amazon.com/sagemaker/">Amazon's SageMaker</a>. Similar to SageMaker is <a href="https://cloud.google.com/ml-engine/">Google's ML Engine</a>.</p>
+<h3 id="Amazon-Web-Services-(AWS)">Amazon Web Services (AWS)<a class="anchor-link" href="#Amazon-Web-Services-(AWS)">&#182;</a></h3><p>Amazon's cloud service to build, train, and deploy ML models.</p>
+<p>Advantages:</p>
+<ul>
+<li>Use of any programming language or software framework for building, training, and deploying amchine learning model in AWS</li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Built-in algorithms</a> - Various built-in algorithms, e.g. <ul>
+<li>for discrete classification or quantitative analysis using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html">linear learner</a> or </li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html">XGBoost</a></li>
+<li>item recommendations using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines.html">factorization machine</a>, </li>
+<li>grouping based upon attributes using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/k-means.html">K-Means</a>, </li>
+<li>an algorithm for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/image-classification.html">image classification</a></li>
+<li>Time Series Analysis with <a href="https://docs.aws.amazon.com/de_de/sagemaker/latest/dg/deepar.html">DeepAR</a></li>
+</ul>
+</li>
+<li>Custom Algorithms - Different programming languages and software frameworks that can be used to develop custom algorithms<ul>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/pytorch.html">PyTorch</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/tf.html">TensorFlow</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/mxnet.html">Apache Spark</a>, and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/chainer.html">Chainer</a></li>
+</ul>
+</li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Own algorithms</a> - Use your own algorithm when it isn't included within the built-in or custom algorithms above</li>
+</ul>
+<p>In addition, the use of <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html">Jupyter Notebooks</a> is enabled and there are the following additional features and automated tools that make modeling and deployment easier:</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html">Automatic Model Tuning: SageMaker</a> - Feature for hyperparameter tuning of built-in and custom algorithms. In addition, SageMaker provides evaluation metrics for buil-in algorithms</li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-overview.html">Monitoring Models in Sagemaker</a> - Features to monitor your deployed models. One can choose how much traffic to route to each deployed model (model variant). <ul>
+<li>More information on routing: <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_ProductionVariant.html">here</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">here</a></li>
+</ul>
+</li>
+<li>Type of Predictions - SageMaker allows for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-test-model.html">On-demand</a> type of predictions whre each prediction request can contain one to many requestst. SageMaker also allows for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works-batch.html">Batch</a> predictions, and request data size limits are based upon S3 object size limits. </li>
+</ul>
+<h3 id="Google-Cloud-Platform-(GCP)">Google Cloud Platform (GCP)<a class="anchor-link" href="#Google-Cloud-Platform-(GCP)">&#182;</a></h3><p><a href="https://cloud.google.com/ml-engine/">Google cloud Platform (GCP) ML Engine</a> is Google's cloud service. <strong>Similarities</strong> and <strong>differences:</strong></p>
+<ul>
+<li>Prediction costs: <a href="https://cloud.google.com/ml-engine/docs/pricing#node-hour">ML Engine pricing</a> vs. Sagemaker pricing.</li>
+<li>Ability to explore and process data: Jupyter Notebooks are not available within ML Engine<ul>
+<li>To use Jupyter Notebooks within GCP, one would use <a href="https://cloud.google.com/datalab/docs/">Datalab</a> can be used to explore and transform raw data into clean data for analysis and processing, </li>
+<li><a href="https://cloud.google.com/dataflow/docs/">DataFlow</a> can be used to deploy batch and streaming dta processing pipelines</li>
+<li>AWS also has data processing and transformation pipeline services: <a href="https://aws.amazon.com/glue/">AWS Glue</a> and <a href="https://aws.amazon.com/datapipeline/">AWS Data Pipeline</a></li>
+</ul>
+</li>
+<li>Machine Learning Software: <a href="https://cloud.google.com/ml-engine/">Google's ML Engine</a> has less flexibility in available software frameworks for building, training, and deploying machine learning models in GCP, compared to Amazon's SageMaker. </li>
+</ul>
+<p>The two available software frameworks for modeling within <strong>ML Engine</strong>:</p>
+<ul>
+<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/">Google's TensorFlow</a> - Keras is a higher level API written in Python taht runs on top of TF. <ul>
+<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/samples">TensorFlow examples</a></li>
+<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/samples#census-keras">Keras example</a></li>
+</ul>
+</li>
+<li><a href="https://cloud.google.com/ml-engine/docs/scikit/">Google's Scikit-learn</a> and <a href="https://xgboost.readthedocs.io/en/latest/python/index.html">XGBoost Python package</a> can be used together for creating, training, and deploying machine learning models. <ul>
+<li>In <a href="https://cloud.google.com/ml-engine/docs/scikit/training-xgboost">Google's example</a> XGBoost is used for modeling and Scikit-learn is used for processing the data. </li>
+</ul>
+</li>
+</ul>
+<p>Flexibility in Modeling and Deployment</p>
+<ul>
+<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/hyperparameter-tuning-overview">Automatic Model Tuning</a></li>
+<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/monitor-training">Monitoring Models</a></li>
+<li>Type of predictions - ML Engine allows for <a href="https://cloud.google.com/ml-engine/docs/tensorflow/online-predict">Online</a> type of predictions whre each prediction request can contain one to many requests. ML Engine also allows for <a href="https://cloud.google.com/ml-engine/docs/tensorflow/batch-predict">Batch</a> predictions. For more information: <a href="https://cloud.google.com/ml-engine/docs/tensorflow/online-vs-batch-prediction">Online and Batch predictions</a></li>
+</ul>
+<h3 id="Other-frameworks">Other frameworks<a class="anchor-link" href="#Other-frameworks">&#182;</a></h3><ul>
+<li>Microsoft Azure<ul>
+<li><a href="https://azure.microsoft.com/en-us/overview/ai-platform/#platform">Azure AI</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/machine-learning-studio/">Azure Machine Learning Studio</a></li>
+</ul>
+</li>
+<li><a href="https://www.paperspace.com/ml">Paperspace</a> - simply provides GPU-backed virtual machines with industry standard software tools<ul>
+<li>Claims to provide more powerful and less expensive virtual machines than AWS, GCP or Azure</li>
+</ul>
+</li>
+<li><a href="https://www.cloudfoundry.org/">Cloud Foundry</a> - open source cloud application platform</li>
+</ul>
+<h2 id="Summary---Cloud-Computing">Summary - Cloud Computing<a class="anchor-link" href="#Summary---Cloud-Computing">&#182;</a></h2><ul>
+<li>Cloud computing - Transforming an IT product into a service</li>
+<li>Deployment - Making model available for predictions through applications</li>
+</ul>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cloud-Computing-Defined">Cloud Computing Defined<a class="anchor-link" href="#Cloud-Computing-Defined">&#182;</a></h2><p><img src="../images/nistcloud.png"></p>
+<p>The graphic above is from the Naional Institute of Standards and Technology (NIST) and its definition of cloud computing has three levels:</p>
+<ul>
+<li>Service Models</li>
+<li>Deployment Models</li>
+<li>Essential Characteristics</li>
+</ul>
+<h3 id="Service-Models">Service Models<a class="anchor-link" href="#Service-Models">&#182;</a></h3><h4 id="Software-as-a-Service-(SaaS)">Software as a Service (SaaS)<a class="anchor-link" href="#Software-as-a-Service-(SaaS)">&#182;</a></h4><p><img src="../images/cloud_saas.png"></p>
+<p>The yellow dashed line in the graphic shows with SaaS, the only customer responsibilities are those attributed to a "user" and all other responsibilties are placed on the cloud provider.</p>
+<p>Software as a product (i.e. a physical copy like a cd) has become rare.</p>
+<p>Other examples of SaaS:</p>
+<ul>
+<li>email applications</li>
+<li>storage applications</li>
+</ul>
+<h4 id="Platform-as-a-Service-(PaaS)">Platform as a Service (PaaS)<a class="anchor-link" href="#Platform-as-a-Service-(PaaS)">&#182;</a></h4><p><img src="../images/cloud_paas.png"></p>
+<p>Examples:</p>
+<ul>
+<li>Services that allow to easily build, host, monitor, and scale their applications using their platform. </li>
+<li>i.e. build and host an e-commerce website. </li>
+</ul>
+<h4 id="Infrastructure-as-a-Service-(IaaS)">Infrastructure as a Service (IaaS)<a class="anchor-link" href="#Infrastructure-as-a-Service-(IaaS)">&#182;</a></h4><p>with IaaS the customer has most responsibility beyond those associated with running secure data centers and maintaining the hardware and software that enables IaaS.</p>
+<p><img src="../images/cloud_iaas.png"></p>
+<p>Examples:</p>
+<ul>
+<li>AWS, Rackspace</li>
+</ul>
+<p>IaaS enables the customer to provisioning computer processing, storage, networks, other fundamental computing resources</p>
+<h3 id="Deployment-Models-of-Cloud-Computing">Deployment Models of Cloud Computing<a class="anchor-link" href="#Deployment-Models-of-Cloud-Computing">&#182;</a></h3><p><img src="../images/deploymentmodels.png"></p>
+<h3 id="Essential-Characteristics">Essential Characteristics<a class="anchor-link" href="#Essential-Characteristics">&#182;</a></h3><p><img src="../images/essentialcharacteristics.png"></p>
+<h2 id="...">...<a class="anchor-link" href="#...">&#182;</a></h2><p>(left out o</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># check the function</span>
-<span class="n">test_seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
-<span class="n">one_hot_test</span> <span class="o">=</span> <span class="n">one_hot_encode</span><span class="p">(</span><span class="n">test_seq</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">one_hot_test</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># !!jupyter nbconvert *.ipynb</span>
 </pre></div>
 
 </div>
@@ -12061,1152 +12167,14 @@ Length of encoded: 1985223
 
 <div class="output_area">
 
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[[[0. 1. 0. 0.]
-  [0. 0. 1. 0.]
-  [0. 0. 0. 1.]]]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Making-training-mini-batches">Making training mini-batches<a class="anchor-link" href="#Making-training-mini-batches">&#182;</a></h3><ul>
-<li>We want to create mini-batches for training</li>
-<li>We want our batches to be multiple sequences of some desired number of sequence steps. </li>
-</ul>
-<p><img src="../images/sequence_batching@1x.png" width=500px></p>
-<ul>
-<li>We'll take the encoded characters (passed in as the <code>arr</code> parameter)</li>
-<li>split them into multiple sequences, given by <code>batch_size</code>. </li>
-<li>Each sequence will be of length <code>seq_length</code>. </li>
-</ul>
-<h2 id="How-to-create-batches?">How to create batches?<a class="anchor-link" href="#How-to-create-batches?">&#182;</a></h2><ul>
-<li>We have 1,985,223 characters</li>
-<li>N <code>(batch_size)</code>: Number of sequences in a batch</li>
-<li>M <code>(seq_length)</code>: or number of time steps in a sequence</li>
-<li>K: Total number of batches that we can make from the array <code>arr</code> (=total characters?)</li>
-<li>Each batch contains $N \times M$ characters, i.e. <code>batch_size * seq_length</code></li>
-<li>$N * M * K$ is the total number of characters to keep</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="1.-Discard-text-so-we-only-have-full-mini-batches">1. Discard text so we only have full mini-batches<a class="anchor-link" href="#1.-Discard-text-so-we-only-have-full-mini-batches">&#182;</a></h4><ul>
-<li>What is a "good" <code>batch_size</code> and <code>seq_length</code>? </li>
-<li>Decide and keep number of total characters $N * M * K$</li>
-</ul>
-<h4 id="2.-Split-arr-into-$N$-batches">2. Split <code>arr</code> into $N$ batches<a class="anchor-link" href="#2.-Split-arr-into-$N$-batches">&#182;</a></h4><p>This can be done using <code>arr.reshape(size)</code> where size is a tuple containing the dimensions sized of the reshaped array.</p>
-<ul>
-<li>We want N (<code>batch_size</code>) sequences in a batch<ul>
-<li>N can be determined as first dimension. </li>
-<li>Second dimension can be set as <code>-1</code> as a placeholder in the size. It'll be fitted according to the data</li>
-</ul>
-</li>
-</ul>
-<p>This yields an array that is $N \times (M * K)$</p>
-<h4 id="3.-Now-iterate-though-array-to-get-mini-batches.">3. Now iterate though array to get mini-batches.<a class="anchor-link" href="#3.-Now-iterate-though-array-to-get-mini-batches.">&#182;</a></h4><ul>
-<li>Every batch is a $N \times M$ window on the array</li>
-<li>For each batch, the window moves over by <code>seq_length</code>. </li>
-<li>In addition, we want to create input and target arrays<ul>
-<li>Targets are inputs shifted over by one character</li>
-</ul>
-</li>
-</ul>
-<p>Recommendation:</p>
-<ul>
-<li>Use <code>range</code>to take steps of size <code>n_steps</code> from 0 to <code>arr.shape[1]</code>, the total number of tokens in each sequence. </li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># N</span>
-<span class="n">seq_length</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># M </span>
-<span class="n">n_batches</span> <span class="o">=</span> <span class="mi">5</span>
-
-<span class="c1"># create data </span>
-<span class="n">my_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">seq_length</span> <span class="o">*</span> <span class="n">n_batches</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
-
-<span class="c1">### function prep ###</span>
-
-<span class="c1"># calculate batch_size_total</span>
-<span class="n">batch_size_total</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">*</span> <span class="n">seq_length</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;batch_size_total: </span><span class="si">{}</span><span class="s2">, seq_length: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size_total</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">))</span>
-
-<span class="c1"># calculate number of batches</span>
-<span class="n">n_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">my_arr</span><span class="p">)</span> <span class="o">//</span> <span class="n">batch_size_total</span> <span class="c1"># K</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;n_batches:&quot;</span><span class="p">,</span> <span class="n">n_batches</span><span class="p">)</span>
-
-<span class="c1"># Keep only enough chars to make full batches </span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;my_arr.size before cutting:&quot;</span><span class="p">,</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-<span class="n">my_arr</span> <span class="o">=</span> <span class="n">my_arr</span><span class="p">[:</span><span class="n">n_batches</span> <span class="o">*</span> <span class="n">batch_size_total</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;my_arr.size after cutting:&quot;</span><span class="p">,</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;my_arr.shape:&quot;</span><span class="p">,</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-<span class="c1"># reshape with batches as rows</span>
-<span class="n">my_arr</span> <span class="o">=</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;my_arr.shape:&quot;</span><span class="p">,</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">my_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">seq_length</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">my_arr</span><span class="p">[:,</span> <span class="n">n</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="n">seq_length</span><span class="p">])</span>  
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>batch_size_total: 30, seq_length: 10
-n_batches: 5
-my_arr.size before cutting: 154
-my_arr.size after cutting: 150
-my_arr.shape: (150,)
-my_arr.shape: (5, 30)
-0
-[[  0   1   2   3   4   5   6   7   8   9]
- [ 30  31  32  33  34  35  36  37  38  39]
- [ 60  61  62  63  64  65  66  67  68  69]
- [ 90  91  92  93  94  95  96  97  98  99]
- [120 121 122 123 124 125 126 127 128 129]]
-10
-[[ 10  11  12  13  14  15  16  17  18  19]
- [ 40  41  42  43  44  45  46  47  48  49]
- [ 70  71  72  73  74  75  76  77  78  79]
- [100 101 102 103 104 105 106 107 108 109]
- [130 131 132 133 134 135 136 137 138 139]]
-20
-[[ 20  21  22  23  24  25  26  27  28  29]
- [ 50  51  52  53  54  55  56  57  58  59]
- [ 80  81  82  83  84  85  86  87  88  89]
- [110 111 112 113 114 115 116 117 118 119]
- [140 141 142 143 144 145 146 147 148 149]]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_batches</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Create a generator that returns batches of size</span>
-<span class="sd">       batch_size x seq_length from arr.</span>
-<span class="sd">       </span>
-<span class="sd">       Arguments</span>
-<span class="sd">       ---------</span>
-<span class="sd">       arr: Array you want to make batches from</span>
-<span class="sd">       batch_size: Batch size, the number of sequences per batch</span>
-<span class="sd">       seq_length: Number of encoded chars in a sequence</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    
-    <span class="n">batch_size_total</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">*</span> <span class="n">seq_length</span>
-    <span class="c1"># total number of batches we can make</span>
-    <span class="n">n_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">//</span><span class="n">batch_size_total</span>
-    
-    <span class="c1"># Keep only enough characters to make full batches</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[:</span><span class="n">n_batches</span> <span class="o">*</span> <span class="n">batch_size_total</span><span class="p">]</span>
-    <span class="c1"># Reshape into batch_size rows</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    
-    <span class="c1"># iterate through the array, one sequence at a time</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">seq_length</span><span class="p">):</span>
-        <span class="c1"># The features</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[:,</span> <span class="n">n</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="n">seq_length</span><span class="p">]</span>
-        <span class="c1"># The targets, shifted by one</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">y</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">arr</span><span class="p">[:,</span> <span class="n">n</span><span class="o">+</span><span class="n">seq_length</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="n">y</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">arr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="k">yield</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batches</span> <span class="o">=</span> <span class="n">get_batches</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
-
-<span class="c1"># printing out the first 10 items in a sequence</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;x</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:</span><span class="mi">10</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">y</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:</span><span class="mi">10</span><span class="p">])</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x
- [[46 17 39 56 38 25 50 60 48 61]
- [55 44 45 60 38 17 39 38 60 39]
- [25 45 62 60 44 50 60 39 60 22]
- [55 60 38 17 25 60 23 17 42 25]
- [60 55 39 12 60 17 25 50 60 38]
- [23 57 55 55 42 44 45 60 39 45]
- [60 21 45 45 39 60 17 39 62 60]
- [15 10  9 44 45 55 59  7 70 60]]
-
-y
- [[17 39 56 38 25 50 60 48 61 61]
- [44 45 60 38 17 39 38 60 39 38]
- [45 62 60 44 50 60 39 60 22 44]
- [60 38 17 25 60 23 17 42 25 22]
- [55 39 12 60 17 25 50 60 38 25]
- [57 55 55 42 44 45 60 39 45 62]
- [21 45 45 39 60 17 39 62 60 55]
- [10  9 44 45 55 59  7 70 60 64]]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Notes">Notes<a class="anchor-link" href="#Notes">&#182;</a></h4><ul>
-<li>The y sequence is shifted by one character!</li>
-</ul>
-<h2 id="Defining-the-network-in-PyTorch">Defining the network in PyTorch<a class="anchor-link" href="#Defining-the-network-in-PyTorch">&#182;</a></h2><p>Next step is to implement the network in PyTorch.</p>
-<p><img src="../images/charRNN.png" width=500px></p>
-<h4 id="Model-Structure">Model Structure<a class="anchor-link" href="#Model-Structure">&#182;</a></h4><p>Suggested structure in <code>__init__</code> :</p>
-<ul>
-<li>Create and store the dictionaries</li>
-<li>Define LSTM layer that takes in <ul>
-<li><code>input_size</code> (number of characters), </li>
-<li>hidden layer size: <code>n_hidden</code></li>
-<li>number of layers: <code>n_layers</code></li>
-<li>a dropout probability: <code>drop_prop</code></li>
-</ul>
-</li>
-<li>Define fully-connected layer with parameters<ul>
-<li>input_size <code>n_hidden</code>  </li>
-<li><code>output_size</code>: number of characters</li>
-</ul>
-</li>
-<li>Finally, initialize the weights</li>
-</ul>
-<h2 id="LSTM-Inputs/Outputs">LSTM Inputs/Outputs<a class="anchor-link" href="#LSTM-Inputs/Outputs">&#182;</a></h2><p>Basic LSTM layer: <a href="https://pytorch.org/docs/stable/nn.html#lstm">Link</a></p>
-<div class="highlight"><pre><span></span><span class="c1"># Example</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">lstm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> 
-                    <span class="n">n_hidden</span><span class="p">,</span> 
-                    <span class="n">n_layers</span><span class="p">,</span> 
-                    <span class="n">dropout</span><span class="o">=</span><span class="n">drop_prob</span><span class="p">,</span>
-                    <span class="n">batch_first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-<ul>
-<li><code>input_size</code>: Number of characters this cell expects as sequential input</li>
-<li><code>n_hidden</code>: Number of units in the hidden layers</li>
-<li>forward function: stack up LSTM cells into layers using <code>.view</code>. </li>
-</ul>
-<p>Also required to create an initial hidden state of all zeros:</p>
-<p>```python
-self.init_hidden()</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Check GPU</span>
-<span class="n">train_on_gpu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
-<span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training on GPU!&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span> 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No GPU available, training on CPU; consider making n_epochs very small.&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>No GPU available, training on CPU; consider making n_epochs very small.
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Define CharRNN class</span>
-<span class="k">class</span> <span class="nc">CharRNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span> 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">n_hidden</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                               <span class="n">drop_prob</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drop_prob</span> <span class="o">=</span> <span class="n">drop_prob</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">=</span> <span class="n">n_layers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span> <span class="o">=</span> <span class="n">n_hidden</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
-        
-        <span class="c1"># Creating character dictionaries</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chars</span> <span class="o">=</span> <span class="n">tokens</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">int2char</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chars</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">char2int</span> <span class="o">=</span> <span class="p">{</span><span class="n">ch</span><span class="p">:</span> <span class="n">ii</span> <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">int2char</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-        
-        <span class="c1"># Define the LSTM</span>
-        <span class="c1"># Batch_first changes order for inputs!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lstm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chars</span><span class="p">),</span> 
-                            <span class="n">n_hidden</span><span class="p">,</span> 
-                            <span class="n">n_layers</span><span class="p">,</span> 
-                            <span class="n">dropout</span><span class="o">=</span><span class="n">drop_prob</span><span class="p">,</span> 
-                            <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
-        <span class="c1"># Dropout layer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">drop_prob</span><span class="p">)</span>
-        
-        <span class="c1"># Fully-connected output layer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_hidden</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chars</span><span class="p">))</span>
-      
-    <span class="c1"># Define forward method</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Forward pass through the network. </span>
-<span class="sd">        Inputs: x, hidden/cell state. </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-                
-        <span class="c1"># Outputs, new hidden state from lstm</span>
-        <span class="n">r_output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">hidden</span><span class="p">)</span>
-        
-        <span class="c1"># Pass through a dropout layer</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">r_output</span><span class="p">)</span>
-        
-        <span class="c1"># Stack up LSTM outputs using view</span>
-        <span class="c1"># contiguous to reshape output</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">)</span>
-        
-        <span class="c1">## Put x through fully-connected layer</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-        
-        <span class="c1"># return final output and the hidden state</span>
-        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">hidden</span>
-    
-    <span class="k">def</span> <span class="nf">init_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method that initializes hidden state</span>
-<span class="sd">        Call at the beginning </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Create two new tensors with sizes n_layers x batch_size x n_hidden,</span>
-        <span class="c1"># initialized to zero, for hidden state and cell state of LSTM</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">data</span>
-        
-        <span class="k">if</span> <span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-            <span class="n">hidden</span> <span class="o">=</span> <span class="p">(</span><span class="n">weight</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span>
-                      <span class="n">weight</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">())</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">hidden</span> <span class="o">=</span> <span class="p">(</span><span class="n">weight</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">zero_</span><span class="p">(),</span>
-                      <span class="n">weight</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">zero_</span><span class="p">())</span>
-        
-        <span class="k">return</span> <span class="n">hidden</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h2><p>Writing a function so we have better control over number of epochs, learning rate and other parameters.</p>
-<ul>
-<li>Adam optimizer</li>
-<li>Cross-entropy loss</li>
-</ul>
-<p>Within the batch loop:</p>
-<ul>
-<li>Detach hidden state from its history</li>
-<li>Use <a href="https://pytorch.org/docs/stable/_modules/torch/nn/utils/clip_grad.html">clip_grad_norm</a> to prevent gradients from exploding<ul>
-<li><a href="https://deepai.org/machine-learning-glossary-and-terms/gradient-clipping">gradient clipping</a></li>
-<li>Function clips gradient norm of an iterable of parameters. </li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">val_frac</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">print_every</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Function to train the network</span>
-<span class="sd">        </span>
-<span class="sd">        Inputs</span>
-<span class="sd">        </span>
-<span class="sd">        net: CharRNN network</span>
-<span class="sd">        data: text data to train the network</span>
-<span class="sd">        epochs: Number of epochs to train</span>
-<span class="sd">        batch_size: Number of mini-sequences per mini-batch, aka batch size</span>
-<span class="sd">        seq_length: Number of character steps per mini-batch, timesteps</span>
-<span class="sd">        lr: learning rate</span>
-<span class="sd">        clip: gradient clipping</span>
-<span class="sd">        val_frac: Fraction of data to hold out for validation</span>
-<span class="sd">        print_every: Number of steps for printing training and validation loss</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># train mode on</span>
-    <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-    
-    <span class="c1"># Adam optimizer</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
-    
-    <span class="c1"># Cross-Entropy loss</span>
-    <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
-    
-    <span class="c1"># Create training and validation data</span>
-    <span class="n">val_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">val_frac</span><span class="p">))</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">val_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="n">val_idx</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">val_idx</span><span class="p">:]</span>
-    
-    <span class="c1"># Check for gpu</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-        <span class="n">net</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    
-    <span class="c1"># initialize counter</span>
-    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">n_chars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">chars</span><span class="p">)</span>
-    
-    <span class="c1"># training loop</span>
-    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
-        
-        <span class="c1"># initialize hidden state with init_hidden method</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">init_hidden</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
-        
-        <span class="c1"># batch loop</span>
-        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">get_batches</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
-            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-            
-            <span class="c1"># One-hot encode our data </span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">one_hot_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_chars</span><span class="p">)</span>
-            
-            <span class="c1"># Make them Torch tensors</span>
-            <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-            
-            <span class="c1"># Send to gpu if applicable</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-                <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span> <span class="n">targets</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-
-            <span class="c1"># Creating new variables for the hidden state, otherwise</span>
-            <span class="c1"># we&#39;d backprop through the entire training history</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">each</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">h</span><span class="p">])</span>
-
-            <span class="c1"># zero accumulated gradients</span>
-            <span class="n">net</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-            
-            <span class="c1"># get output from the model</span>
-            <span class="n">output</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
-            
-            <span class="c1"># calculate loss</span>
-            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">targets</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="o">*</span><span class="n">seq_length</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">())</span>
-            
-            <span class="c1"># backward pass</span>
-            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-            
-            <span class="c1"># `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">clip_grad_norm_</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">clip</span><span class="p">)</span>
-            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-            
-            <span class="c1"># Validation</span>
-            <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="n">print_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                
-                <span class="c1"># Get validation loss</span>
-                <span class="n">val_h</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">init_hidden</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
-                <span class="n">val_losses</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-                
-                <span class="c1"># </span>
-                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">get_batches</span><span class="p">(</span><span class="n">val_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
-                    <span class="c1"># One-hot encode our data and make them Torch tensors</span>
-                    <span class="n">x</span> <span class="o">=</span> <span class="n">one_hot_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_chars</span><span class="p">)</span>
-                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-                    
-                    <span class="c1"># Creating new variables for the hidden state, otherwise</span>
-                    <span class="c1"># we&#39;d backprop through the entire training history</span>
-                    <span class="n">val_h</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">each</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">val_h</span><span class="p">])</span>
-                    
-                    <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
-                    <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-                        <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span> <span class="n">targets</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-
-                    <span class="n">output</span><span class="p">,</span> <span class="n">val_h</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">val_h</span><span class="p">)</span>
-                    <span class="n">val_loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">targets</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="o">*</span><span class="n">seq_length</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">())</span>
-                
-                    <span class="n">val_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-                
-                <span class="c1"># train mode on after validation</span>
-                <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-                
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch: </span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">epochs</span><span class="p">),</span>
-                      <span class="s2">&quot;Step: </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span>
-                      <span class="s2">&quot;Loss: </span><span class="si">{:.4f}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()),</span>
-                      <span class="s2">&quot;Val Loss: </span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">val_losses</span><span class="p">)))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Instantiating-and-training-the-model">Instantiating and training the model<a class="anchor-link" href="#Instantiating-and-training-the-model">&#182;</a></h4><ul>
-<li>Create an instance of the CharRNN network<ul>
-<li>define hyperparameters</li>
-</ul>
-</li>
-<li>Define mini-batches size</li>
-<li>start training</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># instantiate CharRNN class</span>
-<span class="n">n_hidden</span> <span class="o">=</span> <span class="mi">256</span> <span class="c1"># 512</span>
-<span class="n">n_layers</span> <span class="o">=</span> <span class="mi">2</span> 
-
-<span class="n">net</span> <span class="o">=</span> <span class="n">CharRNN</span><span class="p">(</span><span class="n">tokens</span><span class="o">=</span><span class="n">chars</span><span class="p">,</span> 
-              <span class="n">n_hidden</span> <span class="o">=</span> <span class="n">n_hidden</span><span class="p">,</span> 
-              <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-              <span class="n">drop_prob</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
-              <span class="n">lr</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CharRNN(
-  (lstm): LSTM(83, 256, num_layers=2, batch_first=True, dropout=0.5)
-  (dropout): Dropout(p=0.5)
-  (fc): Linear(in_features=256, out_features=83, bias=True)
-)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># 128</span>
-<span class="n">seq_length</span> <span class="o">=</span> <span class="mi">32</span> <span class="c1"># 100</span>
-<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># start smaller if you are just testing initial behavior</span>
-
-<span class="c1"># train the model</span>
-<span class="n">train</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">encoded</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">print_every</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1/1... Step: 10... Loss: 3.1237... Val Loss: 3.1249
-Epoch: 1/1... Step: 20... Loss: 3.4172... Val Loss: 3.4152
-Epoch: 1/1... Step: 30... Loss: 3.1932... Val Loss: 3.2921
-Epoch: 1/1... Step: 40... Loss: 3.1119... Val Loss: 3.1488
-Epoch: 1/1... Step: 50... Loss: 3.1418... Val Loss: 3.1239
-Epoch: 1/1... Step: 60... Loss: 3.1149... Val Loss: 3.1096
-Epoch: 1/1... Step: 70... Loss: 3.0897... Val Loss: 3.0551
-Epoch: 1/1... Step: 80... Loss: 3.0201... Val Loss: 2.9858
-Epoch: 1/1... Step: 90... Loss: 2.9510... Val Loss: 2.9470
-Epoch: 1/1... Step: 100... Loss: 2.9281... Val Loss: 2.8912
-Epoch: 1/1... Step: 110... Loss: 2.8835... Val Loss: 2.8221
-Epoch: 1/1... Step: 120... Loss: 2.8082... Val Loss: 2.7513
-Epoch: 1/1... Step: 130... Loss: 2.7148... Val Loss: 2.6715
-Epoch: 1/1... Step: 140... Loss: 2.6953... Val Loss: 2.6104
-Epoch: 1/1... Step: 150... Loss: 2.6770... Val Loss: 2.5547
-Epoch: 1/1... Step: 160... Loss: 2.5842... Val Loss: 2.5128
-Epoch: 1/1... Step: 170... Loss: 2.5460... Val Loss: 2.4810
-Epoch: 1/1... Step: 180... Loss: 2.4858... Val Loss: 2.4555
-Epoch: 1/1... Step: 190... Loss: 2.4780... Val Loss: 2.4361
-Epoch: 1/1... Step: 200... Loss: 2.4787... Val Loss: 2.3921
-Epoch: 1/1... Step: 210... Loss: 2.4112... Val Loss: 2.4856
-Epoch: 1/1... Step: 220... Loss: 2.5770... Val Loss: 2.3846
-Epoch: 1/1... Step: 230... Loss: 2.4734... Val Loss: 2.3444
-Epoch: 1/1... Step: 240... Loss: 2.3989... Val Loss: 2.3151
-Epoch: 1/1... Step: 250... Loss: 2.3450... Val Loss: 2.2881
-Epoch: 1/1... Step: 260... Loss: 2.3147... Val Loss: 2.2603
-Epoch: 1/1... Step: 270... Loss: 2.3040... Val Loss: 2.2462
-Epoch: 1/1... Step: 280... Loss: 2.2978... Val Loss: 2.2226
-Epoch: 1/1... Step: 290... Loss: 2.2522... Val Loss: 2.2018
-Epoch: 1/1... Step: 300... Loss: 2.1897... Val Loss: 2.1808
-Epoch: 1/1... Step: 310... Loss: 2.1700... Val Loss: 2.1638
-Epoch: 1/1... Step: 320... Loss: 2.1940... Val Loss: 2.1533
-Epoch: 1/1... Step: 330... Loss: 2.1942... Val Loss: 2.1417
-Epoch: 1/1... Step: 340... Loss: 2.2145... Val Loss: 2.1259
-Epoch: 1/1... Step: 350... Loss: 2.1642... Val Loss: 2.1150
-Epoch: 1/1... Step: 360... Loss: 2.1610... Val Loss: 2.0958
-Epoch: 1/1... Step: 370... Loss: 2.1149... Val Loss: 2.0848
-Epoch: 1/1... Step: 380... Loss: 2.1233... Val Loss: 2.0717
-Epoch: 1/1... Step: 390... Loss: 2.1788... Val Loss: 2.0606
-Epoch: 1/1... Step: 400... Loss: 2.1436... Val Loss: 2.0488
-Epoch: 1/1... Step: 410... Loss: 2.0948... Val Loss: 2.0399
-Epoch: 1/1... Step: 420... Loss: 2.1707... Val Loss: 2.0361
-Epoch: 1/1... Step: 430... Loss: 2.0419... Val Loss: 2.0219
-Epoch: 1/1... Step: 440... Loss: 2.1164... Val Loss: 2.0088
-Epoch: 1/1... Step: 450... Loss: 2.0703... Val Loss: 2.0037
-Epoch: 1/1... Step: 460... Loss: 2.0581... Val Loss: 1.9862
-Epoch: 1/1... Step: 470... Loss: 2.0368... Val Loss: 1.9785
-Epoch: 1/1... Step: 480... Loss: 2.0509... Val Loss: 1.9735
-Epoch: 1/1... Step: 490... Loss: 2.1091... Val Loss: 1.9601
-Epoch: 1/1... Step: 500... Loss: 1.9766... Val Loss: 1.9496
-Epoch: 1/1... Step: 510... Loss: 2.0420... Val Loss: 1.9494
-Epoch: 1/1... Step: 520... Loss: 2.0233... Val Loss: 1.9389
-Epoch: 1/1... Step: 530... Loss: 1.9863... Val Loss: 1.9212
-Epoch: 1/1... Step: 540... Loss: 1.9579... Val Loss: 1.9187
-Epoch: 1/1... Step: 550... Loss: 1.9660... Val Loss: 1.9136
-Epoch: 1/1... Step: 560... Loss: 1.9605... Val Loss: 1.9003
-Epoch: 1/1... Step: 570... Loss: 1.9104... Val Loss: 1.8923
-Epoch: 1/1... Step: 580... Loss: 1.9305... Val Loss: 1.8865
-Epoch: 1/1... Step: 590... Loss: 1.9578... Val Loss: 1.8862
-Epoch: 1/1... Step: 600... Loss: 1.8513... Val Loss: 1.8771
-Epoch: 1/1... Step: 610... Loss: 1.9291... Val Loss: 1.8682
-Epoch: 1/1... Step: 620... Loss: 1.9748... Val Loss: 1.8572
-Epoch: 1/1... Step: 630... Loss: 1.8770... Val Loss: 1.8502
-Epoch: 1/1... Step: 640... Loss: 1.8212... Val Loss: 1.8479
-Epoch: 1/1... Step: 650... Loss: 1.8545... Val Loss: 1.8445
-Epoch: 1/1... Step: 660... Loss: 1.9493... Val Loss: 1.8434
-Epoch: 1/1... Step: 670... Loss: 1.8227... Val Loss: 1.8294
-Epoch: 1/1... Step: 680... Loss: 1.8829... Val Loss: 1.8273
-Epoch: 1/1... Step: 690... Loss: 1.9569... Val Loss: 1.8240
-Epoch: 1/1... Step: 700... Loss: 1.8725... Val Loss: 1.8191
-Epoch: 1/1... Step: 710... Loss: 1.9365... Val Loss: 1.8056
-Epoch: 1/1... Step: 720... Loss: 1.8573... Val Loss: 1.8041
-Epoch: 1/1... Step: 730... Loss: 1.7872... Val Loss: 1.8001
-Epoch: 1/1... Step: 740... Loss: 1.8773... Val Loss: 1.7922
-Epoch: 1/1... Step: 750... Loss: 1.8878... Val Loss: 1.7876
-Epoch: 1/1... Step: 760... Loss: 1.7684... Val Loss: 1.7785
-Epoch: 1/1... Step: 770... Loss: 1.7910... Val Loss: 1.7808
-Epoch: 1/1... Step: 780... Loss: 1.8050... Val Loss: 1.7750
-Epoch: 1/1... Step: 790... Loss: 1.7898... Val Loss: 1.7664
-Epoch: 1/1... Step: 800... Loss: 1.8556... Val Loss: 1.7636
-Epoch: 1/1... Step: 810... Loss: 1.7571... Val Loss: 1.7576
-Epoch: 1/1... Step: 820... Loss: 1.7985... Val Loss: 1.7543
-Epoch: 1/1... Step: 830... Loss: 1.7740... Val Loss: 1.7467
-Epoch: 1/1... Step: 840... Loss: 1.8128... Val Loss: 1.7471
-Epoch: 1/1... Step: 850... Loss: 1.7959... Val Loss: 1.7369
-Epoch: 1/1... Step: 860... Loss: 1.8648... Val Loss: 1.7344
-Epoch: 1/1... Step: 870... Loss: 1.7425... Val Loss: 1.7326
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-improve-performance?">How to improve performance?<a class="anchor-link" href="#How-to-improve-performance?">&#182;</a></h2><ul>
-<li>Change parameters based on training and validation loss</li>
-<li>Training loss much lower than validation? Overfitting!<ul>
-<li>Increase regularization (more dropout)</li>
-<li>Use a smaller network</li>
-</ul>
-</li>
-<li>Training and validation losses close? Probably underfitting<ul>
-<li>Increase the size of the network</li>
-</ul>
-</li>
-</ul>
-<h4 id="Hyperparameters">Hyperparameters<a class="anchor-link" href="#Hyperparameters">&#182;</a></h4><p>Model:</p>
-<ul>
-<li><code>n_hidden</code> - Number of units in the hidden layers</li>
-<li><code>n_layers</code> - Number of hidden LSTM layers to use.</li>
-</ul>
-<p>Training:</p>
-<ul>
-<li><code>batch_size</code> - Number of sequences running through the network in one pass</li>
-<li><code>seq_length</code> - Number of characters in the sequence the network is trained on. </li>
-<li><code>lr</code> - learning rate for training</li>
-</ul>
-<h2 id="Tips-and-Tricks-(Karpathy)">Tips and Tricks (Karpathy)<a class="anchor-link" href="#Tips-and-Tricks-(Karpathy)">&#182;</a></h2><ul>
-<li><a href="https://github.com/karpathy/char-rnn#tips-and-tricks">Link</a></li>
-</ul>
-<h4 id="Monitoring-Validation-Loss-vs.-Training-Loss">Monitoring Validation Loss vs. Training Loss<a class="anchor-link" href="#Monitoring-Validation-Loss-vs.-Training-Loss">&#182;</a></h4><ul>
-<li>Keep track of the difference between training loss and validation loss</li>
-<li>Training loss much lower than validation loss? Network might be <strong>overfitting</strong>.<ul>
-<li>Solutions: Decrease network size or increase dropout</li>
-</ul>
-</li>
-<li>Training/validation loss about equal? Then Model is underfitting.<ul>
-<li>Increase the size of your model (layers or neurons per layer)</li>
-</ul>
-</li>
-</ul>
-<h4 id="Approximate-number-of-parameters">Approximate number of parameters<a class="anchor-link" href="#Approximate-number-of-parameters">&#182;</a></h4><ul>
-<li><code>n_layers</code> of 2 or 3 is advised</li>
-<li><code>n_hidden</code> can be adjusted based on how much data are available. </li>
-</ul>
-<h4 id="Best-models-strategy">Best models strategy<a class="anchor-link" href="#Best-models-strategy">&#182;</a></h4><ul>
-<li>Be uncomfortable on making the network larger</li>
-<li>Try different dropout values</li>
-<li>Whatever model has the best validation performance is the one you should use in the end</li>
-</ul>
-<p>Note that it is common practice to run many different models with many different hyperparameter setting, and in the end take whatever checkpoint gave the best validation performance.</p>
-<ul>
-<li>In addition, the size of your training and validation splits are also parameters. Make sure you have a decent amount of data in your validation set or otherwise the validation performance will be noisy and not very informative. </li>
-</ul>
-<h2 id="Checkpoint">Checkpoint<a class="anchor-link" href="#Checkpoint">&#182;</a></h2><p>After training, save the mdoel so it can be loaded it in again if we need to.</p>
-<ul>
-<li>Save parameters needed to create the same architecture, hidden layer hyperparameters and text characters.c</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;rnn_1_epoch.net&quot;</span>
-
-<span class="c1"># save inputs to the model</span>
-<span class="n">checkpoint</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n_hidden&quot;</span><span class="p">:</span> <span class="n">net</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">,</span>
-              <span class="s2">&quot;n_layers&quot;</span><span class="p">:</span> <span class="n">net</span><span class="o">.</span><span class="n">n_layers</span><span class="p">,</span>
-              <span class="s2">&quot;state_dict&quot;</span><span class="p">:</span> <span class="n">net</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-              <span class="s2">&quot;tokens&quot;</span><span class="p">:</span> <span class="n">net</span><span class="o">.</span><span class="n">chars</span><span class="p">}</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Making-Predictions">Making Predictions<a class="anchor-link" href="#Making-Predictions">&#182;</a></h2><p>Model is trained, how to make predictions about the next characters?</p>
-<ul>
-<li>Pass in a character and have the network to predict the next character.</li>
-<li>Take this character, pass it back in, get another predicted character. </li>
-<li>Keep doing this as long as you want...</li>
-</ul>
-<h4 id="Note-on-the-predict-function">Note on the predict function<a class="anchor-link" href="#Note-on-the-predict-function">&#182;</a></h4><ul>
-<li>Output of the RNN is from a fully-connected layer and it outputs a <strong>distribution of next character scores</strong> (softmax)</li>
-<li>Take the character with the highest probability!</li>
-</ul>
-<h4 id="Top-K-Sampling">Top K Sampling<a class="anchor-link" href="#Top-K-Sampling">&#182;</a></h4><ul>
-<li>Predictions are from a categorical probability distribution over all the possible characters (tokens)</li>
-<li>Only consider some $K$ most probable characters</li>
-<li>Use <a href="https://pytorch.org/docs/stable/torch.html#torch.topk">topk</a></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># numpy squeeze </span>
-<span class="n">in_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape before squeeze:&quot;</span><span class="p">,</span> <span class="n">in_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-<span class="c1"># Remove single-dimensional enries from shapae of an array</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Now squeeze it:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">in_arr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape after squeeze&quot;</span><span class="p">,</span> <span class="n">in_arr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Shape before squeeze: (1, 2, 3)
-Now squeeze it:
- [[2 2 2]
- [2 2 2]]
-Shape after squeeze (2, 3)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_k</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Given a character, predict next character</span>
-<span class="sd">    Returns predicted character and hidden state</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="c1"># inputs as tensor</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">net</span><span class="o">.</span><span class="n">char2int</span><span class="p">[</span><span class="n">char</span><span class="p">]]])</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">one_hot_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">chars</span><span class="p">))</span>
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    
-    <span class="c1"># check if gpu</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    
-    <span class="c1"># detach hidden state from history</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">each</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">h</span><span class="p">])</span>
-    
-    <span class="c1"># get the output of the model</span>
-    <span class="n">out</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
-    
-    <span class="c1"># get character probs</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
-    
-    <span class="c1"># move to cpu</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span> 
-        
-    <span class="c1"># get top characters</span>
-    <span class="k">if</span> <span class="n">top_k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">top_ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">chars</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">p</span><span class="p">,</span> <span class="n">top_ch</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">top_k</span><span class="p">)</span>
-        <span class="n">top_ch</span> <span class="o">=</span> <span class="n">top_ch</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        
-    <span class="c1"># Convert p to numpy, remove single-dimensional entries</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-    
-    <span class="c1"># Select the likely next character</span>
-    <span class="c1"># ...with some element of randomness</span>
-    <span class="n">char</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">top_ch</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="o">/</span><span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-    
-    <span class="c1"># return encoded value of the predicted char</span>
-    <span class="c1"># ...as well as the hidden state</span>
-    <span class="k">return</span> <span class="n">net</span><span class="o">.</span><span class="n">int2char</span><span class="p">[</span><span class="n">char</span><span class="p">],</span> <span class="n">h</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Priming-and-generating-text">Priming and generating text<a class="anchor-link" href="#Priming-and-generating-text">&#182;</a></h4><ul>
-<li>Prime the network to build up a hidden state. Otherwise network start out generating characters at random.</li>
-<li>In general, first bunch of characters will be little rough since it hasnt built up a long history of characters to predict from. </li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prime</span><span class="o">=</span><span class="s1">&#39;The&#39;</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        
-    <span class="k">if</span><span class="p">(</span><span class="n">train_on_gpu</span><span class="p">):</span>
-        <span class="n">net</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">net</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
-    
-    <span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span> <span class="c1"># eval mode</span>
-    
-    <span class="c1"># First off, run through the prime characters</span>
-    <span class="n">chars</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">prime</span><span class="p">]</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">init_hidden</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">prime</span><span class="p">:</span>
-        <span class="n">char</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">top_k</span><span class="p">)</span>
-
-    <span class="n">chars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
-    
-    <span class="c1"># Now pass in the previous character and get a new one</span>
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-        <span class="n">char</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">chars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">top_k</span><span class="p">)</span>
-        <span class="n">chars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="n">prime</span><span class="o">=</span><span class="s1">&#39;Anna&#39;</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Anna, when the mome her
-was his charted a dear over that she and to his she shilt, the hound on
-the was how, but tood a comen of stopan, he was a call how, whither the wifed how
-tern that and a dinter as in the
-head to a she shall of the daid
-her with him a said on their she would how at her trun is
-her 
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-a-checkpoint">Loading a checkpoint<a class="anchor-link" href="#Loading-a-checkpoint">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Here we have loaded in a model that trained over 20 epochs `rnn_20_epoch.net`</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;rnn_1_epoch.net&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    
-<span class="n">loaded</span> <span class="o">=</span> <span class="n">CharRNN</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;tokens&#39;</span><span class="p">],</span> <span class="n">n_hidden</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;n_hidden&#39;</span><span class="p">],</span> <span class="n">n_layers</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;n_layers&#39;</span><span class="p">])</span>
-<span class="n">loaded</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;state_dict&#39;</span><span class="p">])</span>
-
-<span class="c1"># Sample using a loaded model</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">loaded</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">prime</span><span class="o">=</span><span class="s2">&quot;And Levin said&quot;</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>And Levin said all think of the will, but tome than his tree he sould his shird that when she sorting in a still the dealt of ans her,
-than intorest tank the his and soman the came time
-seast that with and that a stopt of a serition in anst the compontather.
-
-Afting on sered, and always with the werl was all his hir a little, but his but
-and his to herself all the
-say and the wart in its stret is thas he had betanter that, her, and
-had begon to her the cart, and to
-to the somet of it true, as he had seaning, hore which and trang in sick and
-strat the dids to at his
-she
-sond into her would she sure his
-hungand, and all him and
-tome all her strest one he came the was
-that ang alway, had thinked,
-and to be all shiming have have
-all had been that thould not him the conversated in a sand him to he
-could, though, but the herting as the
-harsed in the did that and she sand
-a seck a lade of in the wonding, with the horsian in a much stired to this with which the sort in
-herself, and his
-content, thought asted at and with the sair, with him to and him
-him had so than
-hersern and she working of imperessed is says him.
-
-&#34;Yele had not strong the rast,
-and strie in sorring. At her, and all a carrie intanting that to the content into a said that he wife a she with her senter. Alexandryone and her,
-but he was this still thas,&#34; said this sone the came had she
-had that was a looked the hurdly to and a position to say at her that a deart to step and his sair herself at a
-said in it was not so the
-dars, had not as tho shead to her so comile out that this an a sand and all the sompition at ang to her hand him that his she hearsess have, women when a stand him.
-
-&#34;I said so
-his at a master a then to
-hims all the childrang to that who all he was not
-strien him.
-
-&#34;Are she how that with his mand, ald she said to had see so she she sorratele, thought that he hord the might to hills him befile that he and the massing
-of a
-said. That, tarling, who which that he have and the sturd of impritacal and a dead the 
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!!</span>jupyter nbconvert <span class="s2">&quot;Character-Level LSTM in PyTorch&quot;</span>.ipynb
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[53]:</div>
+<div class="prompt output_prompt">Out[5]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;[NbConvertApp] Converting notebook Character-Level LSTM in PyTorch.ipynb to html&#39;,
- &#39;[NbConvertApp] Writing 345659 bytes to Character-Level LSTM in PyTorch.html&#39;]</pre>
+<pre>[&#39;[NbConvertApp] Converting notebook Introdution to Deployment.ipynb to html&#39;,
+ &#39;[NbConvertApp] Writing 272996 bytes to Introdution to Deployment.html&#39;]</pre>
 </div>
 
 </div>
