@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Introdution to Deployment</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>SageMaker - 01 - Building a Model</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,49 +11775,44 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Introduction-to-Deployment">Introduction to Deployment<a class="anchor-link" href="#Introduction-to-Deployment">&#182;</a></h1><p>This section is as platform-agnostic as possible but application part focuses on Amazon Web Services (AWS).</p>
-<p>Contents</p>
+<h1 id="Amazon-SageMaker">Amazon SageMaker<a class="anchor-link" href="#Amazon-SageMaker">&#182;</a></h1><ul>
+<li><p>What is it?</p>
 <ul>
-<li>Cloud Computing</li>
-<li>Machine Learning in the Workplace</li>
-<li>Deployment </li>
+<li>Managed jupyter workbook instance</li>
+<li>Runs on virtual machine hosted by Amazon</li>
+<li>Application Programming Interface (API)</li>
 </ul>
-<p>After getting familiar with machine learning deployment we'll put these ideas to practice using <a href="https://aws.amazon.com/sagemaker/">Amazon SageMaker</a> as one way to deploy machine learning models.</p>
-<p>Questions to answer:</p>
+</li>
+<li><p>Why use it?</p>
 <ul>
-<li>What is the machine learning workflow?</li>
-<li>How does <strong>deployment</strong> fit into the machine learning workflow?</li>
-<li>What is cloud computing?</li>
-<li>Why are we using cloud computing for deploying machine learning models?</li>
-<li>Why isn't deployment a part of many machine learning curriculums?</li>
-<li>What does it mean for a model to be deployed?</li>
-<li>What are the essentail characteristics associated with the code of deployed models?</li>
-<li>What are different cloud computing platform we might use to deploy our machine learning models?</li>
-</ul>
-<h2 id="Machine-Learning-Workflow">Machine Learning Workflow<a class="anchor-link" href="#Machine-Learning-Workflow">&#182;</a></h2><p>Consists of three components:</p>
-<ol>
-<li>Explore &amp; Process Data<ul>
-<li>Retrieve data</li>
-<li>Clean &amp; Explore: Explore patterns, remove any outliers</li>
-<li>Transform and prepare: Data Normalization, train-validation-test split</li>
+<li>Simplifies ML Workflow. Notebook can be used for step 1 (Explore &amp; Process Data), whereas the API helps in steps 2 and 3 (Modeling, Deployment)</li>
 </ul>
 </li>
-<li>Modeling<ul>
-<li>Develop &amp; Train Model</li>
-<li>Validate / Evaluate Model</li>
+<li><p>How does it work?</p>
+<ul>
+<li>Working in managed workbook</li>
+<li>API: Toolkit</li>
 </ul>
 </li>
-<li>Deployment <ul>
-<li>Deploy to Production</li>
-<li>Monitor and Update Model &amp; Data </li>
 </ul>
-</li>
+<h2 id="AWS-Educate">AWS Educate<a class="anchor-link" href="#AWS-Educate">&#182;</a></h2><ul>
+<li><a href="https://www.awseducate.com/student/s/pathways?sc_content=Other_ln_ot&amp;sc_outcome=other&amp;sc_medium=em_1218&amp;mkt_tok=eyJpIjoiWTJGaFlqUTFOelJqTVRrMyIsInQiOiJ2ZDVUenljY2VaVHV5Z0RIenZ2Mkg3eFE3WEVvM3g5TFVEWU1nZXR5bkplZDhLZHlNK21TOUgyWWxcL3FNU2xXbjYxTVRFUlI4SzdjdXZiQUlRNWNhbmNjaWlFb2ZpakJYaEV0YzR3Q01GcFp4dUtsMWJtZ3pnbVA4ZGJVR3g3d1QifQ%3D%3D&amp;sc_channel=em&amp;sc_detail=awseducatewelcomeemail1&amp;sc_country=mult&amp;trk=em_1218&amp;sc_campaign=GLOBAL_LN_aws-educate-welcome-series_20180312&amp;sc_geo=mult">Cloud Career Pathways</a></li>
+<li><a href="https://youtu.be/X36oOsjyoXA">Video walk-through</a></li>
+<li><a href="https://www.aws.training/">AWS Training</a></li>
+<li><a href="https://aws.amazon.com/de/getting-started/?sc_channel=em&amp;sc_campaign=global_F90D_DF_F7D_E1_GetStarted_2017&amp;sc_medium=em_50315&amp;sc_content=adopt_f90d_f90d_ot&amp;sc_geo=mult&amp;sc_country=global&amp;sc_outcome=adopt_f90d&amp;trk=em_50315&amp;mkt_tok=eyJpIjoiWldNME4yUTRaall6WkRRMSIsInQiOiJtQ0w3RFBKOEdRZ252RkZVTWtIS3ZVY1JmRytvWUVkNmc5UDRvTmFTcGZPcFVEQ29hZDUxd2pvMVR0VVRMcmR3K0x3Rkp4b3lcL1pvcjJNcDRLaVlhT1wvS2dva0NuQkpjb0RJZ1wvTjhKK3Q4TGdHR0RLWENNVXo0anBzNDlhZnBiQjlXZ1VaTzNmNUtSZE0zbVdZN3NOZ0E9PSJ9">Getting Started</a></li>
+</ul>
+<h4 id="4-Ways-to-get-started">4 Ways to get started<a class="anchor-link" href="#4-Ways-to-get-started">&#182;</a></h4><ol>
+<li>Start Building a Solution: <a href="https://email.awscloud.com/dc/2mk777umeRArLOQYC8WPqn_vFW-YQzHA81_9GObtUnZ3rj0CpnSoLJdQXLaAMz00lo0js8sxJ1Z9sEkM731nPIKXjNmPNptU1XJXb400xm2FUMbhw9FtaJnRd_NqAAko7aBJUyuP5bVStNHCaqwq3eJe7kS4Yu7zrlI7ZdlEf0u1bzxrqrnBSn4A1Bc7a6YVTv2D1KY97lD1VhwpSZ31MIWGPExRVrtL20sqM-VLxiyf0SyavAq9sHz2G4piyon5l4s4GGbQtlLOrwayTk_BndjMDJ92kacr6G6L3Pb3Tgormt7hl9lzta4xKWTjnlBflJrq4soNGZBHYxx8nEeH1tbSUNbuZNYKnyyabukrv-ZDDQzYD7WfpoA1CRmUO7JRJcETBxAG3hIw6tM7oNc5ng==/mj00kU00EdItSOE3ZSm0TM0">Build a Web App</a>, <a href="https://email.awscloud.com/dc/yuZkfPEXXFT65tdReNucEgQufV9pSoK35GaL7Qe8rgKw3LXT9k8odsOTsX6OvAGUB6AaAVT2f9dA1JoLLv42BT5_LSERNTIuB1_9dQLyBAQ6vh9w_2QTVBcrR9nhr5Hdhi22HqA2YLonM-l0YzbNVMy70xI5HyN00dsFkCf0KFbBnVWYAk9Rjt-1XUV7v-pGmvMpGANSYc2BQmBNrJyySOBoAKKA10abFrtns2285nayJ3Bm8wg77tbm4RIMfApo3XnhgjIHjaSVYRArZEPbA4CcyIbYXhR3Nql6WPWaATLM9uMBAK5-xPJJZhc2syAkAqx4-s8r7wygssYRGE5gJqsthyELdyDBqN2S8ll1R9E=/mj00kU00EdItSOE3ZSm0TM0">Register a Domain</a>, or <a href="https://email.awscloud.com/dc/2mk777umeRArLOQYC8WPqn_vFW-YQzHA81_9GObtUnY_D0cOOuSkjHwN3t1RbSNp4-pEeZveR6d9gAbq0KWWaohH_1RidMbIAeCGehWGAOOzhi4jS2GXpySs3ygBADTaXWXXzqBvTDpXGIP-Gy5i6y71gDC8o_2sl4xaIEQqzY8l9IazFuqGKg79Y7DAGbTmMR8MFrd1j9wNo_LOKk7OaD-PPjUkPiAerjFd92oQfDCiPW-cS5hh5Nvy2LLDF3D9JHkwMooAisTK0D4n7is2MaUssOYBpbYod3uU2qY8DvgQNSzNGc2WLUtELvtbwjEntnClufR4cmypcBo-7N_Eq0tjTdBe0QjAgpYVIgi0zOxfJ6JOVhBLh43K9m8U95fk/mj00kU00EdItSOE3ZSm0TM0">Start A Development Project</a></li>
+<li>Try a 10-Minute Tutorial: <a href="https://email.awscloud.com/dc/KwqiTCOQ16Q1JCi3MdelD3ZZGcncVANDEUTkhckMhmiIJfxnxf4lwMKZXcrCCTTJhLqgAL0dTPTUP351riF3Jcqyf0EuHmFX0s88vt7mO887gRmgOacPdK84xaaq_SI_UYrNo605JTPwuF655LllDfVwcFKSTII2GLhcZXseTPWDIiu_cBRtuyD88mbhnVwAHUj6Xi5m6DS8qrw_tZA7pj8M9WiNS5o8A27ekJR9niYg32fnpq9COrB7z5osoE_LLFXYaO8CmPm7w0az5Yoj_6aHzAOGshi14CT5Fgx7s_4esR3d2in3ngJMo4Evjl2uuFjnWoAUiM-PukeYRKeJMA==/mj00kU00EdItSOE3ZSm0TM0">View all 20+ Tutorials</a></li>
+<li>Explore Getting Started Resources: <a href="https://email.awscloud.com/dc/KwqiTCOQ16Q1JCi3MdelD3ZZGcncVANDEUTkhckMhmjKLpc5CeluLOBeryeJSliZOd7HSaDnjFzd0Abmoc1XBrj18JVubOZatd9mgWiLqqGUbPjDlpEp_NUp34Lja7nw44kUpbdaiasloBbQCPD1ganh3ViQqrN9GSGEfUqpSpJQhEJe4zNXFrBt6BRKZGx70-xt49WuzhqBHq4iKgy9xakTavlJEDPM2Zs5J8ofy909Ig4j_NEqrQXgLv6YNxrcXalzSMqPTGH8Ufw6r9_7J8skK--J3rUxIvp_CG1vXW1BQ2FYa42JWZHQKFga5hpy9KjRIknXO9OwOrx3eSmMPQ==/mj00kU00EdItSOE3ZSm0TM0">Explore the Resource Center</a></li>
+<li>Try Aamzon's Simple Cloud Server: <a href="https://email.awscloud.com/dc/KwqiTCOQ16Q1JCi3MdelD7X2Wojh-YozQqZVBYS1snIomUbGOOzVOcJ_Q0iLJPEC-B-oRMFime8Yha-t7yeS7YeHC0rwIplN8YglIjArI7zQgl6UL3wHxJzP2kJeOnE3w7-3z-HUG5gBPPM4KUKN-oglpLT_Wc3bbc4pT52geRoFNdFZX4nZVomtCzEn_m2Rqoeemw3jiWFJV7owVfodN6JyAXzDyI_5QVzZTYAcy5dQc8EJJh0ydhO7lxwbkA0Zoa001aLOQZNOrJax5O8LoK8Fy7_YZK9pAgz8PHe5mWY8Qg8LK3gdun5ypptUuw-GCaJIu0ulV5fWERn7ruUfJA==/mj00kU00EdItSOE3ZSm0TM0">Learn more about Ligthtsail</a></li>
 </ol>
-<p>References:</p>
+<p>Further resources:</p>
 <ul>
-<li>AWS discusses their definition of the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works-mlconcepts.html">ML Workflow</a></li>
-<li>Google Cloud Platform (GCP) and their definition of the <a href="https://cloud.google.com/ml-engine/docs/tensorflow/ml-solutions-overview">ML Worklflow</a></li>
-<li>Microsoft Azure on their definition of the <a href="https://docs.microsoft.com/en-us/azure/machine-learning/service/overview-what-is-azure-ml">ML Workflow</a></li>
+<li>Dataset that will be used: <a href="https://www.cs.toronto.edu/~delve/data/boston/bostonDetail.html">Boston Housing Dataset</a></li>
+<li>Documentation for the high level API can be found <a href="http://sagemaker.readthedocs.io/en/latest/">here</a></li>
+<li>Tutorial: <a href="https://aws.amazon.com/de/getting-started/tutorials/build-train-deploy-machine-learning-model-sagemaker/?trk=gs_card">Build, Train, and Deploy a Machine Learning Model</a> with Amazon SageMaker</li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html">What is Amazon SageMaker</a></li>
 </ul>
 
 </div>
@@ -11827,155 +11822,323 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Cloud-Computing">Cloud Computing<a class="anchor-link" href="#Cloud-Computing">&#182;</a></h2><p>Can be thought of as transforming an IT product into a service.</p>
-<blockquote><p>Using an internet connected device to log into a cloud computing service to access an IT resource. These IT resources are stored in the clud provider's data center.</p>
+<h4 id="GPU-Access">GPU Access<a class="anchor-link" href="#GPU-Access">&#182;</a></h4><ul>
+<li>Smallest GPU instance available when using SageMaker is the <strong>ml.p2.xlarge</strong><ul>
+<li>Adequate for this project. </li>
+<li>[x] Request limit increase <a href="https://console.aws.amazon.com/ec2/v2/home?#Limits">here</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="Setting-up-a-Notebook-instance">Setting up a Notebook instance<a class="anchor-link" href="#Setting-up-a-Notebook-instance">&#182;</a></h4><ul>
+<li>Interaction with SageMaker ecosystem using notebook instances</li>
+<li>Go to console and open the "SageMaker" service. </li>
+<li>"Notebook" &gt; click "Notebook instances"</li>
+<li>"Create Notebook instance"</li>
+<li>Name the notebook instance, <ul>
+<li>notebook instance type: "ml.t2.medium" should be all that is necessary for the notebooks for now. IN addition, the are covered under the free tier (check what's covered).</li>
+</ul>
+</li>
+<li>IAM role: (requires access to "S3 bucket with "sagemaker" in the name")<ul>
+<li>S3 buckets &gt; None (no additional buckets)</li>
+<li>S3 can be thought of as place to store data (e.g. training data)</li>
+<li>click "create role"</li>
+</ul>
+</li>
+<li>Create notebook instance and wait till Status changes</li>
+</ul>
+<h4 id="Cloning-the-Deployment-Notebooks">Cloning the Deployment Notebooks<a class="anchor-link" href="#Cloning-the-Deployment-Notebooks">&#182;</a></h4><ul>
+<li>SageMaker can be linked directly to a Github repo and it's recommended to do so</li>
+</ul>
+
+<pre><code># if not specified in git, go to Terminal
+cd SageMaker
+git clone http://github.com/udacity/sagemaker-deployment.git
+exit</code></pre>
+<ul>
+<li>Also, on the <code>Actions</code> list, you should select <code>Open Jupyter</code> to get the examples notebooks</li>
+</ul>
+<h4 id="SageMaker-Sessions-&amp;-Execution-Roles">SageMaker Sessions &amp; Execution Roles<a class="anchor-link" href="#SageMaker-Sessions-&amp;-Execution-Roles">&#182;</a></h4><p>SageMaker has some unique objects and terminology. There are a few objects that you'll see come up, over and over again:</p>
+<ul>
+<li><strong>Session</strong> - A session is a special object that allows things like manage data in S3 and create and train any machine learning models. <ul>
+<li>More information <a href="https://sagemaker.readthedocs.io/en/latest/session.html">here</a>. </li>
+<li><code>upload_data</code> function should be close to the top of the list. </li>
+<li>Other functions, like <code>train</code>, <code>tune</code>, and <code>create_model</code> will be covered later</li>
+</ul>
+</li>
+<li><strong>Role</strong> (also called execution role) - IAM role that you created. Defines how data that your notebook uses/creates will be stored. You can print out the role with <code>print(role)</code> to see the details of this creation.</li>
+</ul>
+<h4 id="Uploading-to-an-S3-Bucket">Uploading to an S3 Bucket<a class="anchor-link" href="#Uploading-to-an-S3-Bucket">&#182;</a></h4><ul>
+<li><strong>S3</strong> - Simple storage service (S3)</li>
+<li>Method of data storage</li>
+</ul>
+<blockquote><p>S3 is a virtual storage solution that is mostly meant for data to be written to few times and read from many times. This is, in some sense, the main workhorse for data storage and transfer when using Amazon services. These are similar to file folders that contain data and metadata about that data, such as the data size, date of upload, author, and so on.</p>
 </blockquote>
-<p>Other cloud services than cloud storage:</p>
 <ul>
-<li>Cloud applications, databases, virtual machines, SageMaker, etc. </li>
+<li>If data are uploaded to a session, then an S3 bucket is created</li>
 </ul>
-<h4 id="Why-use-cloud-computing?">Why use cloud computing?<a class="anchor-link" href="#Why-use-cloud-computing?">&#182;</a></h4><p>Opt to use cloud computing services due time and cost constraints of building own capacities (see capacity utilization graph below). The graph shows schematically how cloud computing compares to traditinoal infrastructure related to customer demand.</p>
-<p><img src="../images/curve3.png"></p>
-<p>Building up or laying off infrastructure takes time and money, whereas cloud computing is easily scalable to the current demand. As it is assumed to very costly to have excess demand as well as it is costly to be capacity restricted it is economically reasonable to rely on cloud computing services.</p>
+<p>This is indicated by something like the following note:</p>
+
+<pre><code>INFO: sagemaker: Created S3 bucket: &lt;message specific to your locatle, ex. sagemaker-use-west-1#&gt;</code></pre>
 <ul>
-<li>AWS: <a href="https://aws.amazon.com/de/what-is-cloud-computing/">What is Cloud Computing?</a></li>
+<li>More about how creating a csv file in the <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.concat.html">pandas docs</a></li>
+<li>In the example: Concatenating x and y data sets as columns of data (<code>axis=1</code>) and converting that pandas dataframe into a csv file using <code>.to_csv</code>. </li>
 </ul>
-<p>Benefits:</p>
+<h2 id="SageMaker-Example-1:-Boston-Housing">SageMaker Example 1: Boston Housing<a class="anchor-link" href="#SageMaker-Example-1:-Boston-Housing">&#182;</a></h2><ul>
+<li>Goal: Predict the median value of a home in Boston Mass. <ul>
+<li>Data: <a href="https://www.cs.toronto.edu/~delve/data/boston/bostonDetail.html">Boston Housing Data</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="Step-0:-Setting-up-the-notebook">Step 0: Setting up the notebook<a class="anchor-link" href="#Step-0:-Setting-up-the-notebook">&#182;</a></h3><ul>
+<li>Importing all the required standard libraries:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="c1"># vis</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import data from sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">import</span> <span class="nn">sklearn.model_selection</span>
+</pre></div>
+<ul>
+<li>Import SageMaker-specific libraries</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sagemaker</span>
+<span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">get_execution_role</span>
+<span class="kn">from</span> <span class="nn">sagemaker.amazon.amazon_estimator</span> <span class="kn">import</span> <span class="n">get_image_uri</span>
+<span class="kn">from</span> <span class="nn">sagemaker.predictor</span> <span class="kn">import</span> <span class="n">csv_serializer</span>
+
+<span class="n">session</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">role</span> <span class="o">=</span> <span class="n">get_execution_role</span><span class="p">()</span>
+</pre></div>
+<ul>
+<li><code>sagemaker.Session()</code> - This is an object that represents the SageMaker session that we are currently operating in. This object contains some useful information that we will need to access later such as our region.</li>
+<li><code>get_execution_role()</code> - This is an object that represents the IAM role that we are currently assigned. When we construct and launch the training job later we will need to tell it what IAM role it should have. Since our use case is relatively simple we will simply assign the training job the role we currently have.</li>
+</ul>
+<h3 id="Step-1:-Downloading-the-data">Step 1: Downloading the data<a class="anchor-link" href="#Step-1:-Downloading-the-data">&#182;</a></h3><ul>
+<li>Loading data with sklearn</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">boston</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Shape Boston data:&quot;</span><span class="p">,</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+<h3 id="Step-2:-Preparing-and-splitting-the-data">Step 2: Preparing and splitting the data<a class="anchor-link" href="#Step-2:-Preparing-and-splitting-the-data">&#182;</a></h3><ul>
+<li>Data is clean and does not need any processing</li>
+<li><p><code>sklearn.model_selection.train_test_split</code> can be used to do this (<a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">link</a></p>
+</li>
+<li><p>The dataset's X and Y variables can be extracted using:</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">X_bos_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">Y_bos_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>Splitting the data</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_test</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">X_bos_pd</span><span class="p">,</span> <span class="n">Y_bos_pd</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">)</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_val</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">)</span>
+</pre></div>
+<h3 id="Step-3:-Uploading-the-data-files-to-S3">Step 3: Uploading the data files to S3<a class="anchor-link" href="#Step-3:-Uploading-the-data-files-to-S3">&#182;</a></h3><ul>
+<li>Training job construction using SageMaker executes a container</li>
+<li>The container performs the training operation. </li>
+<li>This container is given access to data that is stored in S3. <ul>
+<li>Hence, we need to upload the data we want to use for training to S3.</li>
+</ul>
+</li>
+<li>Performing batch transform job: SageMaker expects the input data to be stored in S3 </li>
+</ul>
+<p>We can use the SageMaker API to achieve all this and hide some of the details.</p>
+<h4 id="Step-3.1:-Save-the-data-locally">Step 3.1: Save the data locally<a class="anchor-link" href="#Step-3.1:-Save-the-data-locally">&#182;</a></h4><ul>
+<li>Save data as csv files in a local folder</li>
+<li>Then, upload data to S3.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># make sure local data directory exists</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../data/boston&#39;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>We need to create test, train and validation as csv files which will then be uploaded to S3. </li>
+<li>We use pandas to do this. Do not include header, information or an index</li>
+<li>For the train and validation data, it is assumed that the first entry in each row is the target variable.</li>
+<li>Q: What does <code>pd.concat</code> do?</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">X_test</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;test.csv&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">Y_val</span><span class="p">,</span> <span class="n">X_val</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;validation.csv&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;train.csv&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+<h4 id="Step-3.2:-Upload-to-S3">Step 3.2: Upload to S3<a class="anchor-link" href="#Step-3.2:-Upload-to-S3">&#182;</a></h4><ul>
+<li>We are currently running inside of a SageMaker session<ul>
+<li>We can therefore use the object which represents this session to upload our data to the "default" S3 bucket. </li>
+</ul>
+</li>
+<li>Good practice: Provide a custom prefix (essentially an S3 folder) to make sure that you don't accidentally interfere with data uploaded from some other notebook or project. </li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;boston-xgboost-HL&quot;</span>
+
+<span class="n">test_location</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;test.csv&#39;</span><span class="p">),</span> <span class="n">key_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+<span class="n">val_location</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;validation.csv&#39;</span><span class="p">),</span> <span class="n">key_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+<span class="n">train_location</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;train.csv&#39;</span><span class="p">),</span> <span class="n">key_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+</pre></div>
+<h3 id="Step-4:-Train-the-XGBoost-model">Step 4: Train the XGBoost model<a class="anchor-link" href="#Step-4:-Train-the-XGBoost-model">&#182;</a></h3><p>What are the next steps?</p>
+<ul>
+<li>Training and validation data are uploaded to S3</li>
+<li>Construct XGBoost model and train it. </li>
+<li>Make use of <em>High Level SageMaker API</em>.<ul>
+<li>High Level: Easier to read, less flexible</li>
+</ul>
+</li>
+</ul>
+<p>How to construct an estimator?</p>
+<ul>
+<li>The object we wish to train requires a location of a container with the training code.</li>
+<li>For built in algorithms: Container is provided by Amazon.</li>
+<li>Full name of the container is lengthy and depends on the region that we are operating in. <ul>
+<li>Use <code>get_image_uri</code> from <code>sagemaker.amazon.amazon_estimator</code> that constructs the image name for us. </li>
+</ul>
+</li>
+</ul>
+<p>How to use <code>get_image_uri</code>?</p>
+<ul>
+<li>Provide it with <ul>
+<li>our current region, obtained from session object: <code>sagemaker.Session()</code></li>
+<li>Name of the algorithm. The algorithm we will be using is XGBoost. Other available buil-in algorithms can be found in the list of <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">common parameters</a></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># Construct the image name for the training container.</span>
+<span class="n">container</span> <span class="o">=</span> <span class="n">get_image_uri</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">boto_region_name</span><span class="p">,</span> <span class="s1">&#39;xgboost&#39;</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>Now that we know which container to use, we can construct the estimator object.</li>
+<li>We will be using the <a href="https://xgboost.readthedocs.io/en/latest/">XGBoost</a> algorithm.<ul>
+<li>Learn more about XGBoost starting with the docs which can be found at [<a href="https://xgboost.readthedocs.io/en/latest/">https://xgboost.readthedocs.io/en/latest/</a>]. </li>
+</ul>
+</li>
+</ul>
+<p>How to construct the estimator object?</p>
+<div class="highlight"><pre><span></span><span class="c1"># instantiate xgb object</span>
+<span class="n">xgb</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">Estimator</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> 
+                                    <span class="n">role</span><span class="p">,</span>      
+                                    <span class="n">train_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                                    <span class="n">train_instance_type</span><span class="o">=</span><span class="s1">&#39;ml.m4.xlarge&#39;</span><span class="p">,</span> 
+                                    <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;s3://{}/{}/output&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">default_bucket</span><span class="p">(),</span> <span class="n">prefix</span><span class="p">),</span>
+
+                                    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li><code>container</code> - Image name of the training container</li>
+<li><code>role</code>- The IAM role to use (our current role in this case)</li>
+<li><code>train_instance_count=1</code> - The number of instances to use for training</li>
+<li><code>train_instance_type='ml.m4.xlarge</code> - The type of instance to use for training</li>
+<li><code>output_path='s3://{}/{}/output'.format(session.default_bucket(), prefix)</code> - Where to save the output (the model artifacts)</li>
+<li><code>sagemaker_session=session</code> - The current SageMaker session</li>
+</ul>
+<p>Next:</p>
+<ul>
+<li>Set hyperparameters</li>
+<li>Additional information on the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html">XGBoost hyperparameter page</a></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">xgb</span><span class="o">.</span><span class="n">set_hyperparameters</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="n">eta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                        <span class="n">gamma</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                        <span class="n">min_child_weight</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                        <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                        <span class="n">objective</span><span class="o">=</span><span class="s1">&#39;reg:linear&#39;</span><span class="p">,</span>
+                        <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                        <span class="n">num_round</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+<p>Next:</p>
+<ul>
+<li>It's time to train</li>
+<li>Make sure SageMaker knows our input data is csv</li>
+<li>Execute with the <code>.fit</code> method</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># wrapper around location, to make sure that SageMaker knows our data is in csv format.</span>
+<span class="n">s3_input_train</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">s3_input</span><span class="p">(</span><span class="n">s3_data</span><span class="o">=</span><span class="n">train_location</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span>
+<span class="n">s3_input_validation</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">s3_input</span><span class="p">(</span><span class="n">s3_data</span><span class="o">=</span><span class="n">val_location</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span>
+
+<span class="n">xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">s3_input_train</span><span class="p">,</span> <span class="s1">&#39;validation&#39;</span><span class="p">:</span> <span class="n">s3_input_validation</span><span class="p">})</span>
+</pre></div>
+<p>Remember the name of the notebook: <code>Boston Housing - XGBoost (Batch Transform) - High Level.ipynb</code></p>
+<ul>
+<li><strong>Batch Transform</strong> - Method we will be using to test our model once we have trained it. Will be discussed later</li>
+<li><strong>High Level</strong> - Describes the API we will be using to get SAgeMaker to perform various machine learning tasks.<ul>
+<li>Referst to the Python SDK whose documentation can be found <a href="https://sagemaker.readthedocs.io/en/latest/">here</a>. This high level approach simplifies a lot of the details when working with SageMaker and can be very useful.</li>
+</ul>
+</li>
+</ul>
+<p>Resources:</p>
+<ul>
+<li>XGBoost - <a href="https://github.com/dmlc/xgboost/tree/master/demo#machine-learning-challenge-winning-solutions">List of XGBoost-based winning solutions</a> to a variety of competitions, at the linked XGBoost repository. </li>
+<li>Etimators - Docs on <a href="https://sagemaker.readthedocs.io/en/latest/estimators.html">estimators</a> for more information about this object. Essentially, the estimator is an object that specifies some details about how  a model will be trained. It gives the ability to create and deploy a model.</li>
+<li>Training job - Used to train a specific estimator. </li>
+</ul>
+<p>When a training job is reqeuested you need to provide a few items:</p>
 <ol>
-<li>Reduced investments and proportional costs (cost reduction)</li>
-<li>Increased scalability (providing simplified capacity planning)</li>
-<li>Increased availability and reliability (providing organizatinal agility)</li>
+<li>Location on S3 where training and validation data is procided</li>
+<li>Location on S3 where resulting model will be store (data is called model artifcasts)</li>
+<li>Location of a docker container (certainly the case if using a built in algorithm) to be used for training</li>
+<li>A description of the compute instance that should be used.</li>
 </ol>
-<p>Risks:</p>
-<ol>
-<li>(Potential) Increase in Security Vulnerabilities</li>
-<li>Reduced Operational Governance Control (over cloud resources)</li>
-<li>Limited Portability Between Cloud Providers</li>
-<li>Multi-regional Compliance and Legal Issues</li>
-</ol>
-<h3 id="Deployment-to-Production">Deployment to Production<a class="anchor-link" href="#Deployment-to-Production">&#182;</a></h3><ul>
-<li>Integrate machine learning model into an existing production environment </li>
-<li>Model needs to be provided to those responsible for deployment. </li>
-</ul>
-<p>In the following we will assume taht the machine learning model was developed in Python.</p>
-<p>Three primary methods used to transfer a model from the modeling component to the deployment component (least to most commonly used):</p>
+<p>SageMaker will execute the instance, load up the necessary docker container and execute it, pass in the location of the training data. After training, the model artifacts are packaged up and stored on S3.</p>
+<p>Resources:</p>
 <ul>
-<li>Python model is recorded into the programming langauge of the production environment</li>
-<li>Model is coded in Predictive Model Markpu Language (PMML) or Portable Format Analytics (PFA)</li>
-<li>Python model is converted into a format that can be used in the production environment (i.e. SageMaker).<ul>
-<li>Use libraries and methods that convert the model into code that can be used in the production environment like PyTorch, TensorFlow, Scikit-Learn, etc. that convert Python models intot he intermediate standard format, such as <a href="https://onnx.ai/">Open Neural Network Exchange</a> format.</li>
-<li>This standard format can be converted into the software native of the production environment. </li>
+<li>High-level example of KMeans estimator <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-train-model-create-training-job.html">here</a></li>
+<li><a href="https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bfdf09f_xgboost/xgboost.pdf">XGBoost paper</a></li>
+</ul>
+<h3 id="Step-5:-Test-the-model">Step 5: Test the model<a class="anchor-link" href="#Step-5:-Test-the-model">&#182;</a></h3><ul>
+<li>Model has been fitted to the training data</li>
+<li>Use validation data</li>
+<li>Use SageMaker's batch transform functionality.<ul>
+<li>Start by building a transformer object from our fitted model</li>
 </ul>
 </li>
+<li>More about the transform and wait functions: <a href="https://sagemaker.readthedocs.io/en/latest/transformer.html">Transformer documentiation</a></li>
 </ul>
-<p>The last one is the easierst and fastesst way to move a Python Model from modeling directly to deployment:</p>
+<div class="highlight"><pre><span></span><span class="n">xgb_transformer</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">transformer</span><span class="p">(</span><span class="n">instance_count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">instance_type</span> <span class="o">=</span> <span class="s1">&#39;ml.m4.xlarge&#39;</span><span class="p">)</span>
+</pre></div>
 <ul>
-<li>Typical way to move models into the production environoment</li>
-<li>Technologies like <em>containers</em>, <em>endpoints</em> and <em>APIs</em> (Application Programming Interfaces) also help ease the work required for deploying a model into production environment. </li>
-</ul>
-<p>In earlier stages development was typically handled by analysts, whereas operations (deployment) was handled by software developers responsible for the production environment.</p>
-<p>Recently, this division between development and operations softens enabling analysts to handle certain aspects of deployment and enables faster updates to faltering models.</p>
-<p>Advances in cloud services, like <a href="https://aws.amazon.com/sagemaker/">SageMaker</a> and <a href="https://cloud.google.com/ml-engine/">ML Engine</a>, and deployment technologies, like Containers and REST APIs, allow for analysts to easily take on the responsibilities of deployment.</p>
-<h3 id="Production-Environments">Production Environments<a class="anchor-link" href="#Production-Environments">&#182;</a></h3><ul>
-<li>Endpoint: Interface to the model</li>
-<li>The interface (enpoint) facilitates an ease of communication between the modle and the application.</li>
-</ul>
-<p><img src="../images/endpoint2.png"></p>
-<p>One way to think of the <strong>endpoint</strong> that acts as this interface:</p>
-<ul>
-<li><strong>endpoint</strong> itself if like a function call</li>
-<li>the <strong>function</strong> itself would be the model and</li>
-<li>the <strong>Python program</strong> is the application</li>
-</ul>
-<p>Similar to the example above:</p>
-<ul>
-<li><strong>Endpoint</strong> accepts user data as the <strong>input</strong> and <strong>returns</strong> the model's prediction based upon this input through the endpoint (similar to a function call)</li>
-<li>In the example, the user data is the input argument and the prediction is the returned value from the function call. </li>
-<li>The <strong>application</strong>, here is the <strong>python program</strong>, displays the model's prediction to the application user. </li>
-</ul>
-<p>The endpoint itself is just the interface between the model and the application.</p>
-<ul>
-<li>interface enables users to get predictions from the deployed model based on their user data. </li>
-</ul>
-<h4 id="How-does-the-endpoint-(interface)-facilitates-communication-between-application-and-model?">How does the endpoint (interface) facilitates communication between application and model?<a class="anchor-link" href="#How-does-the-endpoint-(interface)-facilitates-communication-between-application-and-model?">&#182;</a></h4><p>Application and model communicate throught he endpoint (interface). The enpoint is an Application Programming Interface (API).</p>
-<ul>
-<li>API: set of rules that enable programs (here the application and the model) to communicate with each other</li>
-</ul>
-<p>Here, the <em>API</em> uses a <strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer, <strong>REST</strong> architecture that provides a framework for the set of rules and constraints that mus be adhered to for communication betweeen programs.</p>
-<ul>
-<li>Hypertext Transfer Protocol (HTTP): application protocol for distributed, collaborative, hypermedia information systems. Foundation of data communication for WWW. </li>
-<li><strong>REST API</strong> is one that uses HTTP requests and responses to enable communication between the application and the model through the endpoint (interface). </li>
-<li><strong>HTTP request</strong> and <strong>HTTP response</strong> are communications sent between the application and model. </li>
-</ul>
-<h4 id="HTTP-request">HTTP request<a class="anchor-link" href="#HTTP-request">&#182;</a></h4><p>HTTP request sent from applicaion to model consists of four parts:</p>
-<ul>
-<li>Enpoint: Endpoint in the form of a Uniform Resource Locator (URL), aka web address</li>
-<li>HTTP method: Four <strong>HTTP methods</strong>. For deployment of our application we'll use the <strong>POST method</strong>.</li>
-<li>HTTP Headers: The <strong>headers</strong> will contain additional information (like data format within the message) that's passed to the receiving program. </li>
-<li>Message (Data or Body): The final part is the <strong>message</strong> (data or body); for deployment this will contain the user's data which is input into the model. </li>
-</ul>
-<p><img src="../images/httpmethods.png"></p>
-<h4 id="HTTP-response">HTTP response<a class="anchor-link" href="#HTTP-response">&#182;</a></h4><p>Sent from model to your application and is composed of three parts:</p>
-<ul>
-<li>HTTP Status Code: If successfully received and processed the user's data that was sent in the <strong>message</strong> status code should start with a 2 (i.e. 200)</li>
-<li>HTTP Headers: The headers will contain additional information, like format of the data within the message, thats passed to the receiving program. </li>
-<li>Message (Data or Body): What's returnes as the data within the message is the prediction that's provided by the model. </li>
-</ul>
-<p>The prediction is then presented to the application user through the application. The enpoint is the interface that enables communication between the application and the model using a <strong>REST API</strong>.</p>
-<h4 id="Whats's-application's-reponsibility?">Whats's application's reponsibility?<a class="anchor-link" href="#Whats's-application's-reponsibility?">&#182;</a></h4><ul>
-<li>Format the user's data to put into the HTTP request message and be used by the model</li>
-<li>Translate predictions from the HTTP response message in a way that's easy for the application user's to understand. </li>
-</ul>
-<p>Information included in the HTTP messages sent between <strong>application</strong> and <strong>model</strong>:</p>
-<ul>
-<li>User's data will need to be in a CSV or JSON format with a specific ordering of the data. Ordering depends on the used model. </li>
-<li>Often predictions will be returned in CSV or JSON format with a specific ordering of the returned predictions. Ordering depends on the used model. </li>
-</ul>
-<h2 id="Containers">Containers<a class="anchor-link" href="#Containers">&#182;</a></h2><p>So far, two primary programs, the <strong>model</strong> and the <strong>application</strong>, that communicate with each other through the <strong>endpoint (interface)</strong></p>
-<p><img src="../images/endpoint3.png"></p>
-<ul>
-<li>What is the <strong>model</strong>? The model is the Python model that's created, trained, and evaluated in the modeling component of the machine learning workflow.</li>
-<li>What is the <strong>application</strong>? The application is a web or software that enables the users to use the model to retrieve predictions.</li>
-</ul>
-<p>Both, model and application, require a computing environment. One way to create this environment is to use <strong>containers</strong>. Containers are created using a script that contains instructions on which software packages, libraries, and other computing attributes are needed in order to run a software application, in our case either the model or application.</p>
-<h4 id="But-what-is-a-container?">But what is a container?<a class="anchor-link" href="#But-what-is-a-container?">&#182;</a></h4><blockquote><p>A container can be thought of as a standardized collection/bundle of software that is to be used for the specific purpose of running an application.</p>
-</blockquote>
-<p>A common container software is <a href="www.docker.com">Docker</a>.</p>
-<h3 id="Containers,-explained">Containers, explained<a class="anchor-link" href="#Containers,-explained">&#182;</a></h3><p>Shipping container analogy:</p>
-<ul>
-<li>Shipping container can contain a wide variety of products</li>
-<li>Structure of a shipping container provides the ability to hold different types of products</li>
-</ul>
-<p>Docker containers:</p>
-<ul>
-<li>Can contain all types of different software. </li>
-<li>Structure of a Docker <strong>container</strong> enables the <strong>container</strong> to be created, saved, used, and deleted through a set of common tools. </li>
-<li>The common tool set works with <strong>any container</strong> regardless of the software the <strong>container</strong> contains. </li>
-</ul>
-<p>The image below shows three containers running three different applications</p>
-<p><img src="../images/container.png"></p>
-<p>This architecture provides the following advantages:</p>
-<ul>
-<li>Isolates the application, which increases security</li>
-<li>Requires only software neede to run the application, which uses computational resources more efficiently and allows for faster application deployment. </li>
-<li>Makes application creation, replication, delection, and maintenance easier and the same across all applicatinos that are deployed using containers. </li>
-<li>Provides a more simple and secure way to replicate, save, and share containers. </li>
-</ul>
-<p>A container script file is used to create a container.</p>
-<ul>
-<li>Can easily be shared with others, provides a simple method to replicate a particular container. </li>
-<li>The container script is simply the instructiuons (algorithm) that is used to create a container. For <em>Docker</em>, these files are called <em>dockerfiles</em>. </li>
-</ul>
-<p><img src="../images/container2.png"></p>
-<ul>
-<li>Container engine uses a container script to create a container for an application to run within.</li>
-<li>These container script files can be stored in repositories, which provide a simple means to share and replicate containers. </li>
-<li>Docker: <a href="https://hub.docker.com/explore/">Docker Hub</a> is the official repository for storing and sharing dockerfiles. </li>
-<li>Example of a dockerfile: <a href="https://github.com/pytorch/pytorch/blob/master/docker/pytorch/Dockerfile">Link</a><ul>
-<li>The dockerfile creates a docker container with Python 3.6 and PyTorch installed.</li>
+<li>Begin a batch transform job<ul>
+<li>using trained model </li>
+<li>apply it to the test data stored in S3. </li>
+<li>Provide SageMaker with the type of used data</li>
+<li>Make sure to let SageMaker know how to split our data up into chunks if data happens to be too large</li>
 </ul>
 </li>
+<li><code>transform</code> function takes in the location of some test data, and some information about how that test data is formatted. </li>
 </ul>
+<div class="highlight"><pre><span></span><span class="n">xgb_transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_location</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;text/csv&#39;</span><span class="p">,</span> <span class="n">split_type</span><span class="o">=</span><span class="s1">&#39;Line&#39;</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>batch transform job will be executed in the background</li>
+<li>Since we need to wait for the results before continuing, we'll use the <code>wait()</code> method. </li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">xgb_transformer</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+<ul>
+<li>resulting output is stored on S3. </li>
+<li>copy the output file from its S3 location and save it locally so we can use it. </li>
+</ul>
+
+<pre><code>!aws s3 cp --recursive $xgb_transformer.output_path $data_dir</code></pre>
+<ul>
+<li>Create scatter plot between the predicted and actual values. </li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">Y_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;test.csv.out&#39;</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Median Price&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Predicted Price&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Median Price vs Predicted Price&quot;</span><span class="p">)</span>
+</pre></div>
+<p><img src="../images/scatter1.png"></p>
 
 </div>
 </div>
@@ -11984,204 +12147,20 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Characteristics-of-Deployment-and-Modeling">Characteristics of Deployment and Modeling<a class="anchor-link" href="#Characteristics-of-Deployment-and-Modeling">&#182;</a></h2><h4 id="What-is-Deployment?">What is Deployment?<a class="anchor-link" href="#What-is-Deployment?">&#182;</a></h4><p>Method that integrates a machine learnin model into an existing production environment so that the model can be used to make decisions or predictions based upon data input into this model.</p>
-<h4 id="Whas-is-a-production-environment?">Whas is a production environment?<a class="anchor-link" href="#Whas-is-a-production-environment?">&#182;</a></h4><p>A production environment can be thought of as a web, mobile, or other software application that is currently being used by many people and must respond quickly to those users' requests.</p>
-<h3 id="Characteristics-of-modeling">Characteristics of modeling<a class="anchor-link" href="#Characteristics-of-modeling">&#182;</a></h3><h4 id="Hyperparameters">Hyperparameters<a class="anchor-link" href="#Hyperparameters">&#182;</a></h4><p>In ML, a hyperparameters is a parameter whose value cannot be estimated from the data:</p>
-<ul>
-<li>Not learned through the estimators. </li>
-<li>Must be set by the developer</li>
-<li>Hyperparameter tuning is an important part of model training. </li>
-<li>Cloud platform machine learning services often provide methods that allow for automatic hyperparameter tuning for use with model training</li>
-<li>Without automatic hyperparameter option, one option is to use methods from scikit-learn Python library for hyperparameters tuning (<a href="https://scikit-learn.org/stable/modules/grid_search.html#">link</a>.</li>
+<h3 id="Optional:-Clean-up">Optional: Clean up<a class="anchor-link" href="#Optional:-Clean-up">&#182;</a></h3><ul>
+<li>disk space can be filled up</li>
+<li>good idea to remove the files that were created along the way</li>
+<li>can be done from terminal or notebook hub or with the following code</li>
 </ul>
-<h3 id="Characteristics-of-Deployment">Characteristics of Deployment<a class="anchor-link" href="#Characteristics-of-Deployment">&#182;</a></h3><h4 id="Model-Versioning">Model Versioning<a class="anchor-link" href="#Model-Versioning">&#182;</a></h4><ul>
-<li>Saving model version as model's metadata in database</li>
-<li>deployment platform should indicate a deployed model's version. </li>
-</ul>
-<h4 id="Model-Monitoring">Model Monitoring<a class="anchor-link" href="#Model-Monitoring">&#182;</a></h4><ul>
-<li>Monitor the performance of the model</li>
-<li>Application may need to be updated</li>
-</ul>
-<h4 id="Model-Updating-and-Routing">Model Updating and Routing<a class="anchor-link" href="#Model-Updating-and-Routing">&#182;</a></h4><p>Another characteristic:</p>
-<ul>
-<li>Ability to update deployed model</li>
-<li>If the monitoring process shows that performance metrics are not met the model requires updating. </li>
-<li>Change in the data generating process: Collect these data to update the model</li>
-<li>Routing: To allow comparison of performance between the deployed model variants, routing should be supported.</li>
-</ul>
-<h4 id="Model-Predictions">Model Predictions<a class="anchor-link" href="#Model-Predictions">&#182;</a></h4><p>Two common type of predictions provided by the deployed model.</p>
-<ul>
-<li>On-demand predictions (online, real-time, synchronous predictions) <ul>
-<li>Predictions are returned in the response from the request. Often, these requests and responses are done through an API using JSON or XML formatted strings.</li>
-<li>Commonly used to provide real-time, online responsen based upon a deployed model. </li>
-</ul>
-</li>
-<li>Batch predictions (asynchronous, batch-based predictions)<ul>
-<li>One expects high volume of requests with more periodic submissions, latency won't be an issue. </li>
-<li>Batch request points to specifically formatted data file or request and will return the predictions to a file. Cloud services require these files will be stored in the cloud provider's cloud. </li>
-<li>Batch predictions are commonly used to help make business decisions (i.e. for weekly reports). </li>
-</ul>
-</li>
-</ul>
-<p><img src="../images/mlworkflow.png"></p>
+<div class="highlight"><pre><span></span><span class="c1"># First we will remove all of the files contained in the data_dir directory</span>
+<span class="err">!</span><span class="n">rm</span> <span class="err">$</span><span class="n">data_dir</span><span class="o">/*</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Comparing-Cloud-Providers">Comparing Cloud Providers<a class="anchor-link" href="#Comparing-Cloud-Providers">&#182;</a></h2><p>Focus on <a href="https://aws.amazon.com/sagemaker/">Amazon's SageMaker</a>. Similar to SageMaker is <a href="https://cloud.google.com/ml-engine/">Google's ML Engine</a>.</p>
-<h3 id="Amazon-Web-Services-(AWS)">Amazon Web Services (AWS)<a class="anchor-link" href="#Amazon-Web-Services-(AWS)">&#182;</a></h3><p>Amazon's cloud service to build, train, and deploy ML models.</p>
-<p>Advantages:</p>
-<ul>
-<li>Use of any programming language or software framework for building, training, and deploying amchine learning model in AWS</li>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Built-in algorithms</a> - Various built-in algorithms, e.g. <ul>
-<li>for discrete classification or quantitative analysis using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html">linear learner</a> or </li>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html">XGBoost</a></li>
-<li>item recommendations using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines.html">factorization machine</a>, </li>
-<li>grouping based upon attributes using <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/k-means.html">K-Means</a>, </li>
-<li>an algorithm for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/image-classification.html">image classification</a></li>
-<li>Time Series Analysis with <a href="https://docs.aws.amazon.com/de_de/sagemaker/latest/dg/deepar.html">DeepAR</a></li>
-</ul>
-</li>
-<li>Custom Algorithms - Different programming languages and software frameworks that can be used to develop custom algorithms<ul>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/pytorch.html">PyTorch</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/tf.html">TensorFlow</a>, <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/mxnet.html">Apache Spark</a>, and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/chainer.html">Chainer</a></li>
-</ul>
-</li>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Own algorithms</a> - Use your own algorithm when it isn't included within the built-in or custom algorithms above</li>
-</ul>
-<p>In addition, the use of <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html">Jupyter Notebooks</a> is enabled and there are the following additional features and automated tools that make modeling and deployment easier:</p>
-<ul>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html">Automatic Model Tuning: SageMaker</a> - Feature for hyperparameter tuning of built-in and custom algorithms. In addition, SageMaker provides evaluation metrics for buil-in algorithms</li>
-<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-overview.html">Monitoring Models in Sagemaker</a> - Features to monitor your deployed models. One can choose how much traffic to route to each deployed model (model variant). <ul>
-<li>More information on routing: <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_ProductionVariant.html">here</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">here</a></li>
-</ul>
-</li>
-<li>Type of Predictions - SageMaker allows for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-test-model.html">On-demand</a> type of predictions whre each prediction request can contain one to many requestst. SageMaker also allows for <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works-batch.html">Batch</a> predictions, and request data size limits are based upon S3 object size limits. </li>
-</ul>
-<h3 id="Google-Cloud-Platform-(GCP)">Google Cloud Platform (GCP)<a class="anchor-link" href="#Google-Cloud-Platform-(GCP)">&#182;</a></h3><p><a href="https://cloud.google.com/ml-engine/">Google cloud Platform (GCP) ML Engine</a> is Google's cloud service. <strong>Similarities</strong> and <strong>differences:</strong></p>
-<ul>
-<li>Prediction costs: <a href="https://cloud.google.com/ml-engine/docs/pricing#node-hour">ML Engine pricing</a> vs. Sagemaker pricing.</li>
-<li>Ability to explore and process data: Jupyter Notebooks are not available within ML Engine<ul>
-<li>To use Jupyter Notebooks within GCP, one would use <a href="https://cloud.google.com/datalab/docs/">Datalab</a> can be used to explore and transform raw data into clean data for analysis and processing, </li>
-<li><a href="https://cloud.google.com/dataflow/docs/">DataFlow</a> can be used to deploy batch and streaming dta processing pipelines</li>
-<li>AWS also has data processing and transformation pipeline services: <a href="https://aws.amazon.com/glue/">AWS Glue</a> and <a href="https://aws.amazon.com/datapipeline/">AWS Data Pipeline</a></li>
-</ul>
-</li>
-<li>Machine Learning Software: <a href="https://cloud.google.com/ml-engine/">Google's ML Engine</a> has less flexibility in available software frameworks for building, training, and deploying machine learning models in GCP, compared to Amazon's SageMaker. </li>
-</ul>
-<p>The two available software frameworks for modeling within <strong>ML Engine</strong>:</p>
-<ul>
-<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/">Google's TensorFlow</a> - Keras is a higher level API written in Python taht runs on top of TF. <ul>
-<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/samples">TensorFlow examples</a></li>
-<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/samples#census-keras">Keras example</a></li>
-</ul>
-</li>
-<li><a href="https://cloud.google.com/ml-engine/docs/scikit/">Google's Scikit-learn</a> and <a href="https://xgboost.readthedocs.io/en/latest/python/index.html">XGBoost Python package</a> can be used together for creating, training, and deploying machine learning models. <ul>
-<li>In <a href="https://cloud.google.com/ml-engine/docs/scikit/training-xgboost">Google's example</a> XGBoost is used for modeling and Scikit-learn is used for processing the data. </li>
-</ul>
-</li>
-</ul>
-<p>Flexibility in Modeling and Deployment</p>
-<ul>
-<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/hyperparameter-tuning-overview">Automatic Model Tuning</a></li>
-<li><a href="https://cloud.google.com/ml-engine/docs/tensorflow/monitor-training">Monitoring Models</a></li>
-<li>Type of predictions - ML Engine allows for <a href="https://cloud.google.com/ml-engine/docs/tensorflow/online-predict">Online</a> type of predictions whre each prediction request can contain one to many requests. ML Engine also allows for <a href="https://cloud.google.com/ml-engine/docs/tensorflow/batch-predict">Batch</a> predictions. For more information: <a href="https://cloud.google.com/ml-engine/docs/tensorflow/online-vs-batch-prediction">Online and Batch predictions</a></li>
-</ul>
-<h3 id="Other-frameworks">Other frameworks<a class="anchor-link" href="#Other-frameworks">&#182;</a></h3><ul>
-<li>Microsoft Azure<ul>
-<li><a href="https://azure.microsoft.com/en-us/overview/ai-platform/#platform">Azure AI</a></li>
-<li><a href="https://azure.microsoft.com/en-us/services/machine-learning-studio/">Azure Machine Learning Studio</a></li>
-</ul>
-</li>
-<li><a href="https://www.paperspace.com/ml">Paperspace</a> - simply provides GPU-backed virtual machines with industry standard software tools<ul>
-<li>Claims to provide more powerful and less expensive virtual machines than AWS, GCP or Azure</li>
-</ul>
-</li>
-<li><a href="https://www.cloudfoundry.org/">Cloud Foundry</a> - open source cloud application platform</li>
-</ul>
-<h2 id="Summary---Cloud-Computing">Summary - Cloud Computing<a class="anchor-link" href="#Summary---Cloud-Computing">&#182;</a></h2><ul>
-<li>Cloud computing - Transforming an IT product into a service</li>
-<li>Deployment - Making model available for predictions through applications</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Cloud-Computing-Defined">Cloud Computing Defined<a class="anchor-link" href="#Cloud-Computing-Defined">&#182;</a></h2><p><img src="../images/nistcloud.png"></p>
-<p>The graphic above is from the Naional Institute of Standards and Technology (NIST) and its definition of cloud computing has three levels:</p>
-<ul>
-<li>Service Models</li>
-<li>Deployment Models</li>
-<li>Essential Characteristics</li>
-</ul>
-<h3 id="Service-Models">Service Models<a class="anchor-link" href="#Service-Models">&#182;</a></h3><h4 id="Software-as-a-Service-(SaaS)">Software as a Service (SaaS)<a class="anchor-link" href="#Software-as-a-Service-(SaaS)">&#182;</a></h4><p><img src="../images/cloud_saas.png"></p>
-<p>The yellow dashed line in the graphic shows with SaaS, the only customer responsibilities are those attributed to a "user" and all other responsibilties are placed on the cloud provider.</p>
-<p>Software as a product (i.e. a physical copy like a cd) has become rare.</p>
-<p>Other examples of SaaS:</p>
-<ul>
-<li>email applications</li>
-<li>storage applications</li>
-</ul>
-<h4 id="Platform-as-a-Service-(PaaS)">Platform as a Service (PaaS)<a class="anchor-link" href="#Platform-as-a-Service-(PaaS)">&#182;</a></h4><p><img src="../images/cloud_paas.png"></p>
-<p>Examples:</p>
-<ul>
-<li>Services that allow to easily build, host, monitor, and scale their applications using their platform. </li>
-<li>i.e. build and host an e-commerce website. </li>
-</ul>
-<h4 id="Infrastructure-as-a-Service-(IaaS)">Infrastructure as a Service (IaaS)<a class="anchor-link" href="#Infrastructure-as-a-Service-(IaaS)">&#182;</a></h4><p>with IaaS the customer has most responsibility beyond those associated with running secure data centers and maintaining the hardware and software that enables IaaS.</p>
-<p><img src="../images/cloud_iaas.png"></p>
-<p>Examples:</p>
-<ul>
-<li>AWS, Rackspace</li>
-</ul>
-<p>IaaS enables the customer to provisioning computer processing, storage, networks, other fundamental computing resources</p>
-<h3 id="Deployment-Models-of-Cloud-Computing">Deployment Models of Cloud Computing<a class="anchor-link" href="#Deployment-Models-of-Cloud-Computing">&#182;</a></h3><p><img src="../images/deploymentmodels.png"></p>
-<h3 id="Essential-Characteristics">Essential Characteristics<a class="anchor-link" href="#Essential-Characteristics">&#182;</a></h3><p><img src="../images/essentialcharacteristics.png"></p>
-<h2 id="...">...<a class="anchor-link" href="#...">&#182;</a></h2><p>(left out the second optional part)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!!</span>jupyter nbconvert *.ipynb
+<span class="c1"># And then we delete the directory itself</span>
+<span class="err">!</span><span class="n">rmdir</span> <span class="err">$</span><span class="n">data_dir</span>
 </pre></div>
 
 </div>
 </div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[1]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;[NbConvertApp] Converting notebook Introdution to Deployment.ipynb to html&#39;,
- &#39;[NbConvertApp] Writing 280478 bytes to Introdution to Deployment.html&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     </div>
   </div>
