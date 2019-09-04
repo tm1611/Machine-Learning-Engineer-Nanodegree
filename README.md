@@ -1,2 +1,2 @@
 # Machine-Learning-Engineer
-Folder for Udacity's Machine Learning Engineer Nanodegree (MLND) Program
+Machine Learning Engineer Nanodegree (MLND) by Udacity.
