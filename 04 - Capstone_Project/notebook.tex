@@ -1,0 +1,651 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Capstone Proposal}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{machine-learning-engineer-nanodegree}{%
+\paragraph{Machine Learning Engineer
+Nanodegree}\label{machine-learning-engineer-nanodegree}}
+
+Timo Meiendresch
+
+    \hypertarget{domain-background}{%
+\section{Domain Background}\label{domain-background}}
+
+\hypertarget{time-series-forecasting-and-machine-learning}{%
+\subsection{Time Series Forecasting and Machine
+Learning}\label{time-series-forecasting-and-machine-learning}}
+
+Time series forecasting is a key challenge in business, economics, and
+many other areas. Improving forecast quality is of great advantage to
+make accurate business decisions.
+
+In many academic areas, machine learning methods have already become
+part of the standard toolkit. Common examples include classification
+tasks, image processing, or text analysis. Yet, in the area of time
+series forecasting, machine learning methods are rarely considered.
+
+The reason for this is that traditional methods often outperformed
+highly complex machine learning methods historically. A widely shared
+perception among researchers was that complex methods for time series
+forecasting were not performing better than traditional ones
+(e.g.~Hyndman, 2019). Among others, Makridakis et al. (2018) noted that
+there is only limited scientific evidence which suggests that neural
+networks for time series forecasting are an essential tool for time
+series forecasting.
+
+\hypertarget{paradigm-shift}{%
+\subsection{Paradigm Shift}\label{paradigm-shift}}
+
+But, advances in the recent years seem to challenge this notion. For
+example, in the recognized M4 forecasting competition a hybrid model
+based on a \textbf{recurrent neural network (RNN)} outperformed all
+other approaches and, thus, showed the potential of RNN-based methods
+(Smyl, 2019, Makridakis et al., 2019).
+
+Moreover, the M4 competition highlights an ongoing paradigm shift in the
+forecasting community. Traditional methods, in particular \textbf{ARIMA}
+or \textbf{exponential smoothing methods}, are applied to individual
+time series. These \textbf{local} methods estimate a number of
+parameters within the limited model space and are referred to as
+\textbf{model-based} (Wang et al., 2019). These methods focus on
+independent models for individual time series.
+
+As the availability of large sets of related data increasead, a new type
+of forecasting problem emerged. Instead of forecasting a single seies
+independently, it is often beneficial to forecast big collections of
+related series. Examples of these type of data can be found in diverse
+areas, such as web traffic, household electricity consumption, or
+product demand of online retailers.
+
+In contrast to local models, RNN-based methods enable the use of
+\textbf{cross-series learning}, i.e.~the training process can use all
+available series, yielding a \textbf{global} representation of the data.
+This approach uses possible dependencies between series which may
+improve forecasting accuracy.
+
+The conditions under which these models actually perform better than
+local ones is a crucial part of this project.
+
+In the aftermath of the M4 competition, various RNN-based methods have
+been published that are based on the idea of \emph{cross-series
+learning}, sometimes combining local methods with recurrent networks. In
+this project I will focus on three recently developed RNN-based methods:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{DeepAR} - Salinas et al. (2017)
+\item
+  \textbf{DeepFactor} - Wang et al. (2019)
+\item
+  \textbf{DeepState} - Rangapuram et al. (2018)
+\end{itemize}
+
+To the best of my knowledge no results of the accuracy of these
+algorithms applied to the M4 data have been published yet with the
+exception of the winning method ES-RNN (Smyl, 2019).
+
+\hypertarget{personal-motivation}{%
+\subsection{Personal motivation}\label{personal-motivation}}
+
+My personal motivation to carry out this project is my background in
+Statistics \& Econometrics, in particular time series analysis. During
+my studies I covered the traditional methods, such as ARIMA, exponential
+smoothing methods and various other exotic models. The superiority of
+local methods was never questioned by the lecturer and machine learning
+models for time series forecasting was not covered at all. Given my
+interest and background, I followed the developments and the M4
+competition closely and take this project as a chance to keep up with
+current research, recently developed methods, as well as new frameworks
+for time series forecasting (i.e.~GluonTS).
+
+    \hypertarget{problem-statement}{%
+\section{Problem Statement}\label{problem-statement}}
+
+Aforementioned algorithms have not been applied to the M4 data. For
+practitioner's and researchers this would be a valuable insight into how
+accurate these methods perform in comparison to traditional,
+\textbf{local} methods as well as in comparison to the ranked
+approaches.
+
+\hypertarget{problem-area-1---rnn-based-algorithms-in-practice}{%
+\subsection{Problem area 1 - RNN-based algorithms in
+practice:}\label{problem-area-1---rnn-based-algorithms-in-practice}}
+
+\begin{itemize}
+\tightlist
+\item
+  How accurate are the three RNN-based algorithms on the M4 data?
+\item
+  Are the RNN-based algorithms applicable in \emph{real-world}
+  forecasting scenarios?
+\item
+  What is their relative performance compared to benchmark methods used
+  in the M4 competition?
+\end{itemize}
+
+Moreover, the M4 competition data were designed for the purpose of
+resembling ``real-world'' forecasting practice. Hence, we can we can use
+these data to answer some of the many questions regarding the RNN-based
+algorithms in practice.
+
+\hypertarget{problem-area-2-possible-extension-of-the-project-if-there-is-enough-time-left}{%
+\subsection{Problem area 2 (possible extension of the project if there
+is enough time
+left):*}\label{problem-area-2-possible-extension-of-the-project-if-there-is-enough-time-left}}
+
+\begin{itemize}
+\tightlist
+\item
+  Are there significant performance differences across
+  \emph{frequencies} (Yearly, Quarterly, Monthly, Weekly, Daily, Hourly)
+  or \emph{domain} (Micro, Industry, Macro, Finance, Demographic,
+  Other)?
+\end{itemize}
+
+Another problem area concerns the requirements data requirements. The
+aforementioned papers vaguely addresses this by describing the dataset
+to consist of \textbf{large} and \textbf{related} series (for example
+Salinas et al., 2017; Wang et al., 2019).
+
+\hypertarget{problem-area-3---size-and-relatedness-requirements-possible-extension-of-the-project-if-there-is-enough-time-left}{%
+\subsection{Problem area 3 - Size and relatedness requirements (possible
+extension of the project if there is enough time
+left):*}\label{problem-area-3---size-and-relatedness-requirements-possible-extension-of-the-project-if-there-is-enough-time-left}}
+
+\begin{itemize}
+\tightlist
+\item
+  Do models that are trained on larger series of the same frequency
+  perform better? Possibele experimental Design: Using random subsets of
+  N=\{100, 500, 1000, n\_i\}
+\item
+  Do models that are trained on the same domain perform better compared
+  to models that are trained cross-sectoral (keeping N constant and vary
+  domain/cross-domain)?
+\end{itemize}
+
+Here, ``better'' refers to ``more accurate'' according to the accuracy
+metrics outlined in the competition.
+
+Please note that answering all these questions is well beyond the extent
+of this project. I will therefore focus on problem area 1 and proceed if
+enough time is left to work on the other problem areas. Also, Spiliotis
+et al. (2019) argues that a subset of 1,000 series should be sufficient
+to reach similar conclusions about the data. Hence, I will use smaller
+subsets of the M4 data to alleviate time and computational capacity
+restrictions.
+
+\hypertarget{a-potential-solution---quantifiable-measurable-and-replicable}{%
+\subsection{A potential solution - Quantifiable, measurable, and
+replicable}\label{a-potential-solution---quantifiable-measurable-and-replicable}}
+
+A potential solution presents the results of the three \textbf{global}
+algorithms using the M4 data and compares them to the \textbf{local}
+benchmark methods.
+
+Performance will be measured by comparing estimated forecasts with the
+realized observations (ground truth) using evaluation metrics of the
+competition. These metrics will be described in a later section.
+
+All code and datasets will be provided on github making this project
+fully replicable.
+
+    \hypertarget{datasets-and-inputs}{%
+\section{Datasets and Inputs}\label{datasets-and-inputs}}
+
+The M4 competition data (Makridakis et al., 2019) contains 100,000
+real-world time series with a frequency-specific lower limit of
+available observations. Also, the data is divided according to six
+domains (Economic, Finance, Demographics, Industry, and Other), as well
+as by frequency (yearly, quarterly, monthly, weekly, daily, and hourly).
+
+Data are publicly available on github and can also be used with the
+respective R package or the GluonTS API for Python. They are separated
+by type (train or test data), where the test data length is equal to the
+frequency-specific forecasting horizon. In the M4 competition the
+forecasting horizons were given as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  Yearly (frequency) - 6 (forecast horizon)
+\item
+  Quarterly - 8
+\item
+  Monthly - 18
+\item
+  Weekly - 13
+\item
+  Daily - 14
+\item
+  Hourly - 48
+\end{itemize}
+
+According to Spiliotis et al. (2019) the M4 data is diverse and the
+closest to what can be perceived as ``real-world'' among a wide variety
+of competition datasets. Moreover, results suggest that random samples
+of 1,000 series could be enough to resemble the overall feature space of
+the entire dataset. Accordingly, due to computational resource
+limitations, I will restrict myself in this project to a subset of 1,000
+series per domain or frequency at maximum.
+
+    \hypertarget{solution-statement}{%
+\section{Solution statement}\label{solution-statement}}
+
+The main problem is to indicate whether aforementioned RNN-based
+algorithms are useful in a \emph{real-world} forecasting scenario. As a
+proxy for \emph{real-world} the M4 competition data are used with the
+established reasoning of Spiliotis et al. (2019).
+
+The project quantifies the performances of each algorithm using three
+evaluation metrics:
+
+\begin{itemize}
+\tightlist
+\item
+  Symmetric mean absolute percentage error (sMAPE)
+\item
+  Mean absolute scaled error (MASE)
+\item
+  Overall weighted average (OWA)
+\end{itemize}
+
+Accuracy performance can be quantified using these metrics.
+Replicability will be secured by making the code available on github.
+
+A solution delivers basic takeaways regarding the applicability of the
+algorithms and accuracy results in comparison to widely known benchmark
+methods.
+
+Extension: Additionally, the solution presents how size, relatedness,
+and frequency affects the performance (for small samples).
+
+    \hypertarget{benchmark-models}{%
+\section{Benchmark models}\label{benchmark-models}}
+
+The M4 competition used a wide variety of benchmark methods. For this
+project I will limit myself to the main one and add two other widely
+used methods.
+
+\begin{itemize}
+\tightlist
+\item
+  Comb benchmark method of the M4 competition - Arithmetic average of
+  simple exponential smoothing, Holt method, and damped Holt method
+\item
+  Auto ARIMA - automatic framework for ARIMA methods
+\item
+  ETS - Automatic framework for exponential smoothing methods
+\end{itemize}
+
+ARIMA and ETS are among the most widely known and used \textbf{local}
+methods in time series forecasting.
+
+    \hypertarget{evaluation-metrics}{%
+\section{Evaluation metrics}\label{evaluation-metrics}}
+
+For comparability with the competition results I will use the same
+evaluation metrics that were used during the competition.
+
+Ranks in the competition were determined by the overall weighted average
+(OWA) which is a composite measure of the symmetric mean absolute
+percentage error (sMAPE) and mean absolute scaled error (MASE). The
+formulas are described in Makridakis et al. (2019).
+
+    \hypertarget{project-design}{%
+\section{Project Design}\label{project-design}}
+
+The workflow will be focused around the interaction between the GluonTS
+API in Python and using the computational power of AWS instances (with
+GPU). Gluon Time Series (GluonTS) toolkit for probabilistic time series
+modeling is based on the Apache MXNet deep learning framework. This
+project requires to extend the knowledge on model deployment using
+PyTorch and SageMaker to working with MXNet on an AWS instance to train
+the models on a GPU instance.
+
+The algorithms are built-in algorithms of GluonTS and/or AWS SageMaker.
+Data preprocessing will be a crucial part of the project as these
+algorithms require the data in a specific format. Based on Spiliotis et
+al. (2019) and computational complexity of these models I will use
+subsets of the data with an upper limit of 1,000 time series per
+experiment. Therefore, I need to preprocess the data to randomly choose
+1,000 series (setting seeds). Moreover, the data needs to be divided by
+frequency and domain for problem areas 2 and 3.
+
+Lastly, the estimates have to be translated into the secondary measures
+MASE and sMAPE from which the OWA can be calculated.
+
+\begin{itemize}
+\tightlist
+\item
+  Step 1 (Data processing) - Preprocess the data in aforementioned way
+\item
+  Step 2 (Data modeling) - Use GluonTS and AWS SageMaker to train the
+  models on the subsets of the M4 data and get forecast estimations
+\item
+  Step 3 (Inference) - Evaluate the forecasts using the outlined
+  accuracy measures.
+\end{itemize}
+
+    \hypertarget{references}{%
+\section{References}\label{references}}
+
+\begin{itemize}
+\tightlist
+\item
+  Hyndman, Rob J. ``A brief history of forecasting competitions.''
+  \emph{International Journal of Forecasting (2019).}
+\item
+  Rangapuram, Syama Sundar, et al. ``Deep state space models for time
+  series forecasting.'' \emph{Advances in Neural Information Processing
+  Systems. 2018.}
+\item
+  Salinas, David, Valentin Flunkert, and Jan Gasthaus. ``DeepAR:
+  Probabilistic forecasting with autoregressive recurrent networks.''
+  \emph{arXiv preprint arXiv:1704.04110 (2017).}
+\item
+  Smyl, Slawek. ``A hybrid method of exponential smoothing and recurrent
+  neural networks for time series forecasting.'' \emph{International
+  Journal of Forecasting (2019).}
+\item
+  Spiliotis, Evangelos, et al. ``Are forecasting competitions data
+  representative of the reality?.'' \emph{International Journal of
+  Forecasting (2019).}
+\item
+  Makridakis, Spyros, Evangelos Spiliotis, and Vassilios Assimakopoulos.
+  ``Statistical and Machine Learning forecasting methods: Concerns and
+  ways forward.'' \emph{PloS one 13.3 (2018): e0194889.}
+\item
+  Makridakis, Spyros, Evangelos Spiliotis, and Vassilios Assimakopoulos.
+  ``The M4 competition: 100,000 time series and 61 forecasting
+  methods.'' \emph{International Journal of Forecasting (2019).}
+\item
+  Wang, Yuyang, et al. ``Deep Factors for Forecasting.'' \emph{arXiv
+  preprint arXiv:1905.12417 (2019).}
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

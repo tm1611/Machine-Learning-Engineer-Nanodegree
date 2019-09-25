@@ -14,9 +14,11 @@ September 23rd, 2019
 - Why this problem in the domain can or should be solved
 - Academic research
 
-Time Series Forecasting is a key challenge in business, economics, and many other areas. Having an advantage by increasing forecast accuracy for future development of sales, demand, storage capacities, or many other target quantities is of great benefit.
+Time Series Forecasting is a key challenge in business, economics, and many other areas. Improving forecasts for sales, demand, or other quantities is a great advantage.
 
-Unlike in many other areas of statistical applications, such as image classification or text analysis, deep learning did not take over in the area of time series forecasting. Traditional methods, in particular the *autoregressive integrated moving-average (ARIMA)* and *exponential smoothing (ES)* methods outperformed newly developed, and often more complex, methods. It is not that long ago that researchers perceived that highly complex methods for time series forecasting were not performing better than traditional ones (e.g. Hyndman, 2019). Among others, Makridakis et al. (2018) noted that there is only limited scientific evidence that suggests that neural networks for time series forecasting are an essential tool for time series forecasting.
+Unlike in many other areas of statistical applications, such as image classification or text analysis, deep learning did not take over in the area of time series forecasting.
+
+Traditional methods, in particular the *autoregressive integrated moving-average (ARIMA)* and *exponential smoothing (ES)* methods outperformed newly developed, and often more complex, methods. It is not that long ago that researchers perceived that highly complex methods for time series forecasting were not performing better than traditional ones (e.g. Hyndman, 2019). Among others, Makridakis et al. (2018) noted that there is only limited scientific evidence that suggests that neural networks for time series forecasting are an essential tool for time series forecasting.
 
 Nevertheless, advances in deep learning for time series forecasting in the last two years seem to challenge this notion. In the widely recognized M4 forecasting competition a hybrid model based on a recurrent neural network (RNN) outperformed all other submitted methods and, thus, showed the potential of RNN-based methods in this area (Smyl, 2019, Makridakis et al., 2019).
 
@@ -58,7 +60,7 @@ The main problem can be summarized as:
 
 In particular, how do these algorithms perform on the M4 dataset which can be seen as close to a real-world setting as it gets (more on this in the section about the data). Also, are there significant performance differences across *frequencies* (Yearly, Quarterly, Monthly, Weekly, Daily, Hourly) or *domain* (Micro, Industry, Macro, Finance, Demographic, Other).
 
-Other questions regarding this algorithm come from the authors themselves as they state that data should be *related* and the dataset itself be *large* (for example Salinas et al., 2017; Wang et al., 2019). Unfortunately, there are no guidelines or suggestions about what is considered *large* or what is considered to be *related*. Using the M4 data can help to answer these questions:
+Other questions regarding these algorithms come from the authors themselves as they state that data should be *related* and the dataset itself be *large* (for example Salinas et al., 2017; Wang et al., 2019). Unfortunately, there are no guidelines or suggestions about what is considered *large* or what is considered to be *related*. Using the M4 data can help to answer these questions:
 
 2. Do models that are  trained on larger series of the same frequency perform better? Experimental Design: Using random subsets of N={100, 500, 1000, n_i}
 3. Do models that are trained on the same domain perform better compared to models that are trained cross-sectoral keeping N constant.
@@ -91,7 +93,7 @@ All code and datasets will be provided on github making this project fully repli
 
 The dataset that was used in the M4 competition (Makridakis et al., 2019) contains 100,000 real-world time series with a frequency-specific lower limit of available observations. Also, the data is divided according to six domains (Economic, Finance, Demographics, Industry, and Other), as well as by frequency (yearly, quarterly, monthly, weekly, daily, and hourly).
 
-These data are readily supplied in the GluonTS API and are divided in a train-and test dataset. The test data have a length equal to the frequency-specific forecasting horizon. In the M4 competition the forecasting horizons were given as follows:
+These data are made public on github and can also be accessed using the respective R package or the GluonTS API for Python. and are divided in a train-and test dataset. The test data have a length equal to the frequency-specific forecasting horizon. In the M4 competition the forecasting horizons were given as follows:
 
 - Yearly (frequency) - 6  (forecast horizon)
 - Quarterly - 8
