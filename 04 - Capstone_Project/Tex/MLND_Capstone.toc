@@ -1,0 +1,12 @@
+\babel@toc {english}{}
+\babel@toc {english}{}
+\babel@toc {ngerman}{}
+\babel@toc {english}{}
+\contentsline {section}{\nonumberline List of Figures}{2}% 
+\contentsline {section}{\nonumberline List of Tables}{2}% 
+\contentsline {section}{\numberline {1}Introduction}{3}% 
+\contentsline {section}{\numberline {2}Definition}{5}% 
+\contentsline {section}{\numberline {3}Analysis}{7}% 
+\contentsline {section}{\numberline {4}Methodology}{10}% 
+\contentsline {section}{\numberline {5}Results}{10}% 
+\contentsline {section}{\numberline {6}References}{11}% 
