@@ -82,8 +82,8 @@
 \large{}
 \end{center}
  \vspace{\fill}
-\large{Capstone Project} \\
-\large{Machine Learning Engineer Nanodegree (Udacity)}\\
+\large{Master Thesis (M.Sc. Economics)} \\
+\large{Lecturers: Tom Zimmermann and Simon Umbach}\\
 \vspace{\fill}\\ Cologne 2019\\
 %Cologne
 \end{titlepage}
@@ -150,6 +150,14 @@ Note that these methods are designed and tested for large sets of related. In co
 
 % Structure / Sectioning 
 The paper proceeds as follows. In \hyperref[Definition]{Section \ref{Definition}}, I provide an overview of the project and introduce the performance measures. \hyperref[Analysis]{Section \ref{Analysis}} presents the dataset and algorithms, whereas \hyperref[Methodology]{section \ref{Methodology}} describes the implementation. And lastly, \hyperref[Results]{section \ref{Results}} discusses the results.
+
+\section{Background}
+\label{background}
+
+\subsubsection*{Lessons from the M4 competition}
+
+
+
 
 \section{Definition}
 \label{Definition}
@@ -428,10 +436,10 @@ Another familiar finding are the results for the DeepState algorithm. Forecast r
 \subsection{Conclusion}
 % Data Issue
 % Homoegeneous vs. Heterogeneous data <- DeepAR may outperform on a homogeneous dataset, what about DeepState? Outperform other M4 methods?
-In the course of this project I applied three RNN-based algorithms (DeepAR, DeepState, and DF-RNN) to subsets of the M4 dataset and compared their performance to the competition methods. While I was able to answer how the algorithms performed on the M4 subsets, some questions remain and even more questions were raised.  
+In the course of this project I applied three RNN-based algorithms (DeepAR, DeepState, and DF-RNN) to subsets of the M4 dataset and compared their performance to the competition methods. While I was able to answer how the algorithms performed on the M4 subsets, some questions remain and even more questions were raised.
 
-\subsubsection*{The problem of DF-RNN}
 1) A first implication is that DF-RNN has some major flaws of unknown origin. This makes it unusable for now until they are solved. Note that the authors used a different set of measures and datasets which made a direct comparison difficult. Applying the method to the M4 data with known benchmarks reveals that there are some serious issues with this approach or its implementation. Further research why this method does not deliver the desired results is necessary.
+
 
 2) The untuned DeepAR algorithm yields accurate predictions that are comparable to traditional methods for some frequencies but not as good as the state-of-the art methods of the competition. It is conceivable that the use of additional features (covariates) or hyperparameter optimization can improve its performance to a competitive level. Unlike most of the competition methods, such as the winning method by Smyl, it can be used "out-of-the-box" by practitioners using either gluonts or AWS SageMaker's built-in version. This increases the value of DeepAR tremendously. Also, the performance may be limited due to the diverse nature of the M4 data. Applying the method to a homogeneous dataset may improve its performance beyond local methods. Comparing its performance on a set of highly related data to the M4 methods may be a rewarding topic for future research.
 
