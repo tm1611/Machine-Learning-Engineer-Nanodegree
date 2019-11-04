@@ -1,5 +1,7 @@
 # README
 
+This subfolder contains my final project, the capstone proposal and respective material to replicate the results. 
+
 ## Datasets
 
 There are various ways to acquire the respective data that are necessary for the project:
