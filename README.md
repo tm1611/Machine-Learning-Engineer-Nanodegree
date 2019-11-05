@@ -1,7 +1,11 @@
 # Machine-Learning-Engineer
 
 
+
 ![cert](https://github.com/tm1611/Machine-Learning-Engineer/blob/master/images/MLND%20Certificate.png)
+
+- [Program Syllabus(PDF)](https://s3.amazonaws.com/iridium-content/documents/en-US/machine-learning-engineer-nanodegree-program-syllabus.pdf)
+- [Verification URL](https://graduation.udacity.com/confirm/FM3546EK)
 
 Notes and code for the *Machine Learning Engineer Nanodegree Program* (MLND) by Udacity. The goal of the program is to teach key skills in the area of machine learning. The following excerpt is taken from the program syllabus: 
 
