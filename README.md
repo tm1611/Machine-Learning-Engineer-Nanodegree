@@ -10,6 +10,7 @@
 
 Notes and code for the *Machine Learning Engineer Nanodegree Program* (MLND) by Udacity. The goal of the program is to teach key skills in the area of machine learning. The following excerpt is taken from the program syllabus: 
 
+```
 A graduate of this program will be able to:
 
 - Test Python code and build a Python package of their own.
@@ -31,3 +32,4 @@ analysis model, which is trained to recognize the sentiment of movie reviews (po
 a trained plagiarism detection model using Amazon SageMaker.
 - Capstone Project & Proposal: Complete a final project—choosing from a few, provided options or a
 project of your own design—that involves data exploration and machine learning.
+```
